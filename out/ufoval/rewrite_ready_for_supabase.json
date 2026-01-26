@@ -1,0 +1,1505 @@
+[
+  {
+    "source_url": "https://ufoval.fol74.org/sejours-colonies-de-vacances-a-la-mer/natation-et-sensation?av=1115",
+    "source_partner": "UFOVAL",
+    "age_min": 6,
+    "age_max": 8,
+    "location_name": "Saint-Raphaël",
+    "sessions_json": [
+      {
+        "start_date": "2026-07-18",
+        "end_date": "2026-07-31",
+        "price_base": 1095,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-03",
+        "end_date": "2026-08-09",
+        "price_base": 615,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-03",
+        "end_date": "2026-08-16",
+        "price_base": 1095,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-10",
+        "end_date": "2026-08-16",
+        "price_base": 615,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-17",
+        "end_date": "2026-08-23",
+        "price_base": 615,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-17",
+        "end_date": "2026-08-30",
+        "price_base": 1095,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-24",
+        "end_date": "2026-08-30",
+        "price_base": 615,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      }
+    ],
+    "pro": {
+      "title_pro": "Natation et Sensation à Saint-Raphaël",
+      "short_description_pro": "Un séjour éducatif et sécurisant pour les jeunes nageurs.",
+      "description_pro": "Ce séjour à Saint-Raphaël est conçu pour les enfants de 6 à 8 ans, offrant un environnement sécurisé pour l'apprentissage de la natation. Avec sept sessions disponibles, les enfants bénéficieront d'un encadrement professionnel axé sur la sécurité et le développement de leurs compétences aquatiques. Le programme inclut des activités nautiques variées pour stimuler l'intérêt et l'engagement des participants.",
+      "program_brief_pro": [
+        "Initiation et perfectionnement en natation",
+        "Activités nautiques encadrées",
+        "Sécurité et inclusion prioritaires"
+      ],
+      "educational_option_pro": "Les enfants développeront des compétences en natation tout en apprenant l'importance de la sécurité aquatique et du travail d'équipe.",
+      "departure_city_info": "Départ à confirmer"
+    },
+    "kids": {
+      "title_kids": "Natation et Sensation",
+      "short_description_kids": "Apprends à nager et amuse-toi à la mer !",
+      "description_kids": "Viens à Saint-Raphaël pour un séjour plein de fun et de découvertes aquatiques ! Tu pourras apprendre à nager et faire plein d'activités dans l'eau avec tes nouveaux copains. L'encadrement est super sympa et tu vas t'éclater tout en étant en sécurité.",
+      "program_brief_kids": [
+        "Apprends à nager",
+        "Joue dans l'eau",
+        "Fais-toi plein de copains"
+      ],
+      "educational_option_kids": "Tu vas apprendre à nager comme un pro et découvrir plein de trucs sur la mer !",
+      "departure_city_info_kids": "Départ à confirmer"
+    },
+    "generated_at": "2026-01-26T16:28:50.348Z",
+    "model": "gpt-4o"
+  },
+  {
+    "source_url": "https://ufoval.fol74.org/sejours-colonies-de-vacances-a-la-mer/aqua-gliss?av=1331",
+    "source_partner": "UFOVAL",
+    "age_min": 7,
+    "age_max": 8,
+    "location_name": "Les Issambres",
+    "sessions_json": [
+      {
+        "start_date": "2026-07-18",
+        "end_date": "2026-07-31",
+        "price_base": 1155,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-03",
+        "end_date": "2026-08-09",
+        "price_base": 630,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-03",
+        "end_date": "2026-08-16",
+        "price_base": 1155,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-10",
+        "end_date": "2026-08-16",
+        "price_base": 630,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-17",
+        "end_date": "2026-08-23",
+        "price_base": 630,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-17",
+        "end_date": "2026-08-30",
+        "price_base": 1155,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-24",
+        "end_date": "2026-08-30",
+        "price_base": 630,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      }
+    ],
+    "pro": {
+      "title_pro": "Aqua' Gliss aux Issambres",
+      "short_description_pro": "Un séjour dynamique pour jeunes amateurs de glisse nautique.",
+      "description_pro": "Situé aux Issambres, ce séjour est destiné aux enfants de 7 à 8 ans. Avec un encadrement professionnel, les participants découvriront les plaisirs de la glisse nautique dans un cadre sécurisé. Ce programme est idéal pour développer la confiance en soi et encourager l'exploration des sports nautiques. Plusieurs sessions sont disponibles tout l'été.",
+      "program_brief_pro": [
+        "Découverte de la glisse nautique",
+        "Activités de plage encadrées",
+        "Sécurité et inclusion assurées"
+      ],
+      "educational_option_pro": "Les enfants apprendront les bases des sports nautiques tout en développant leur autonomie et leur esprit d'équipe.",
+      "departure_city_info": "Départ à confirmer"
+    },
+    "kids": {
+      "title_kids": "Aqua' Gliss",
+      "short_description_kids": "Glisse et éclate-toi à la plage !",
+      "description_kids": "Viens aux Issambres pour un séjour où tu pourras glisser sur l'eau et t'amuser à la plage ! Avec des activités super cool et des animateurs sympas, tu vas passer des journées inoubliables avec tes copains. La sécurité est assurée pour que tu puisses profiter à fond.",
+      "program_brief_kids": [
+        "Découvre la glisse sur l'eau",
+        "Amuse-toi à la plage",
+        "Fais-toi plein de copains"
+      ],
+      "educational_option_kids": "Tu vas apprendre à glisser sur l'eau et découvrir plein de choses sur la mer !",
+      "departure_city_info_kids": "Départ à confirmer"
+    },
+    "generated_at": "2026-01-26T16:28:50.361Z",
+    "model": "gpt-4o"
+  },
+  {
+    "source_url": "https://ufoval.fol74.org/sejours-colonies-de-vacances-a-la-montagne/les-robinson-des-glieres?av=1234",
+    "source_partner": "UFOVAL",
+    "age_min": 6,
+    "age_max": 11,
+    "location_name": "Thorens-Glières",
+    "sessions_json": [
+      {
+        "start_date": "2026-07-19",
+        "end_date": "2026-07-25",
+        "price_base": 705,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-07-19",
+        "end_date": "2026-08-01",
+        "price_base": 1295,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-07-26",
+        "end_date": "2026-08-01",
+        "price_base": 705,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-02",
+        "end_date": "2026-08-08",
+        "price_base": 705,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-02",
+        "end_date": "2026-08-15",
+        "price_base": 1295,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-09",
+        "end_date": "2026-08-15",
+        "price_base": 705,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-16",
+        "end_date": "2026-08-22",
+        "price_base": 705,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      }
+    ],
+    "pro": {
+      "title_pro": "Les Robinson des Glières à Thorens-Glières",
+      "short_description_pro": "Un séjour aventureux pour les jeunes explorateurs en herbe.",
+      "description_pro": "Ce séjour à Thorens-Glières est conçu pour les enfants de 6 à 11 ans, offrant une expérience immersive en pleine nature. Encadrés par des professionnels, les enfants apprendront les techniques de survie et découvriront la faune et la flore locales. Ce programme éducatif et sécurisant est idéal pour développer l'autonomie et l'esprit d'initiative des participants.",
+      "program_brief_pro": [
+        "Techniques de survie en pleine nature",
+        "Découverte de la faune et de la flore",
+        "Encadrement professionnel et sécurisé"
+      ],
+      "educational_option_pro": "Les enfants développeront des compétences en survie et apprendront à apprécier et respecter la nature environnante.",
+      "departure_city_info": "Départ à confirmer"
+    },
+    "kids": {
+      "title_kids": "Les Robinson des Glières",
+      "short_description_kids": "Pars à l'aventure dans la montagne !",
+      "description_kids": "Viens à Thorens-Glières pour vivre comme un vrai aventurier ! Tu apprendras à survivre dans la nature, découvrir les animaux et les plantes, et t'amuser avec tes copains. Les animateurs sont là pour t'aider et t'assurer que tu passes un super moment.",
+      "program_brief_kids": [
+        "Apprends à survivre dans la nature",
+        "Découvre les animaux et les plantes",
+        "Amuse-toi avec tes copains"
+      ],
+      "educational_option_kids": "Tu vas apprendre à te débrouiller dans la nature et découvrir plein de choses sur les animaux et les plantes !",
+      "departure_city_info_kids": "Départ à confirmer"
+    },
+    "generated_at": "2026-01-26T16:28:50.361Z",
+    "model": "gpt-4o"
+  },
+  {
+    "source_url": "https://ufoval.fol74.org/sejours-colonies-de-vacances-a-la-montagne/les-apprentis-montagnards?av=1130",
+    "source_partner": "UFOVAL",
+    "age_min": 7,
+    "age_max": 9,
+    "location_name": "Les Carroz d'Arâches",
+    "sessions_json": [
+      {
+        "start_date": "2026-07-19",
+        "end_date": "2026-07-25",
+        "price_base": 670,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-07-19",
+        "end_date": "2026-08-01",
+        "price_base": 1180,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-07-26",
+        "end_date": "2026-08-01",
+        "price_base": 670,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-02",
+        "end_date": "2026-08-08",
+        "price_base": 670,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-02",
+        "end_date": "2026-08-15",
+        "price_base": 1180,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-02",
+        "end_date": "2026-08-22",
+        "price_base": 1590,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-09",
+        "end_date": "2026-08-15",
+        "price_base": 670,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-16",
+        "end_date": "2026-08-22",
+        "price_base": 670,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      }
+    ],
+    "pro": {
+      "title_pro": "Les Apprentis Montagnards aux Carroz d'Arâches",
+      "short_description_pro": "Un séjour éducatif pour découvrir la montagne et ses secrets.",
+      "description_pro": "Ce séjour aux Carroz d'Arâches est destiné aux enfants de 7 à 9 ans. Encadrés par des professionnels, les participants découvriront l'escalade et la faune locale. Ce programme est conçu pour développer la confiance en soi et encourager l'exploration de l'environnement montagnard. Huit sessions sont disponibles à partir de tarif adapté.",
+      "program_brief_pro": [
+        "Initiation à l'escalade",
+        "Découverte de la faune montagnarde",
+        "Encadrement sécurisé et inclusif"
+      ],
+      "educational_option_pro": "Les enfants apprendront les bases de l'escalade et découvriront la richesse de la faune montagnarde.",
+      "departure_city_info": "Départ à confirmer"
+    },
+    "kids": {
+      "title_kids": "Les Apprentis Montagnards",
+      "short_description_kids": "Découvre la montagne et ses secrets !",
+      "description_kids": "Viens aux Carroz d'Arâches pour explorer la montagne ! Tu apprendras à grimper et découvriras plein d'animaux avec tes copains. Les animateurs sont là pour t'aider et te garantir un séjour super fun et sécurisé.",
+      "program_brief_kids": [
+        "Apprends à grimper",
+        "Découvre les animaux de la montagne",
+        "Amuse-toi avec tes copains"
+      ],
+      "educational_option_kids": "Tu vas apprendre à grimper et découvrir plein de choses sur la montagne et ses habitants !",
+      "departure_city_info_kids": "Départ à confirmer"
+    },
+    "generated_at": "2026-01-26T16:28:50.361Z",
+    "model": "gpt-4o"
+  },
+  {
+    "source_url": "https://ufoval.fol74.org/sejours-colonies-de-vacances-a-la-mer/laventure-verticale?av=1103",
+    "source_partner": "UFOVAL",
+    "age_min": 9,
+    "age_max": 11,
+    "location_name": "Saint-Raphaël",
+    "sessions_json": [
+      {
+        "start_date": "2026-07-18",
+        "end_date": "2026-07-31",
+        "price_base": 1155,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-03",
+        "end_date": "2026-08-09",
+        "price_base": 630,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-03",
+        "end_date": "2026-08-16",
+        "price_base": 1155,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-10",
+        "end_date": "2026-08-16",
+        "price_base": 630,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-17",
+        "end_date": "2026-08-23",
+        "price_base": 630,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-17",
+        "end_date": "2026-08-30",
+        "price_base": 1155,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-24",
+        "end_date": "2026-08-30",
+        "price_base": 630,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      }
+    ],
+    "pro": {
+      "title_pro": "L'Aventure Verticale à Saint-Raphaël",
+      "short_description_pro": "Un séjour stimulant pour les jeunes amateurs d'escalade et de voile.",
+      "description_pro": "Ce séjour à Saint-Raphaël est conçu pour les enfants de 9 à 11 ans, offrant une combinaison d'activités d'escalade et de voile. Encadrés par des professionnels, les participants développeront des compétences techniques tout en bénéficiant d'un environnement sécurisé et inclusif. Plusieurs sessions sont disponibles tout l'été.",
+      "program_brief_pro": [
+        "Initiation à l'escalade et à la voile",
+        "Encadrement professionnel et sécurisé",
+        "Développement de compétences techniques"
+      ],
+      "educational_option_pro": "Les enfants apprendront les bases de l'escalade et de la voile, tout en développant leur confiance en eux et leur esprit d'équipe.",
+      "departure_city_info": "Départ à confirmer"
+    },
+    "kids": {
+      "title_kids": "L'Aventure Verticale",
+      "short_description_kids": "Grimpe et navigue à Saint-Raphaël !",
+      "description_kids": "Viens à Saint-Raphaël pour un séjour où tu pourras grimper et naviguer ! Avec des activités super cool et des animateurs sympas, tu vas passer des journées inoubliables avec tes copains. La sécurité est assurée pour que tu puisses profiter à fond.",
+      "program_brief_kids": [
+        "Apprends à grimper",
+        "Navigue sur l'eau",
+        "Amuse-toi avec tes copains"
+      ],
+      "educational_option_kids": "Tu vas apprendre à grimper et naviguer comme un pro tout en t'amusant !",
+      "departure_city_info_kids": "Départ à confirmer"
+    },
+    "generated_at": "2026-01-26T16:28:50.361Z",
+    "model": "gpt-4o"
+  },
+  {
+    "source_url": "https://ufoval.fol74.org/sejours-colonies-de-vacances-a-la-mer/aqua-mix?av=1339",
+    "source_partner": "UFOVAL",
+    "age_min": 9,
+    "age_max": 11,
+    "location_name": "Les Issambres",
+    "sessions_json": [
+      {
+        "start_date": "2026-07-18",
+        "end_date": "2026-07-31",
+        "price_base": 1155,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-03",
+        "end_date": "2026-08-09",
+        "price_base": 630,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-03",
+        "end_date": "2026-08-16",
+        "price_base": 1155,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-10",
+        "end_date": "2026-08-16",
+        "price_base": 630,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-17",
+        "end_date": "2026-08-23",
+        "price_base": 630,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-17",
+        "end_date": "2026-08-30",
+        "price_base": 1155,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-24",
+        "end_date": "2026-08-30",
+        "price_base": 630,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      }
+    ],
+    "pro": {
+      "title_pro": "Séjour Aqua' Mix aux Issambres",
+      "short_description_pro": "Un séjour nautique et éducatif pour les 9-11 ans.",
+      "description_pro": "Aqua' Mix est un séjour conçu pour les enfants de 9 à 11 ans, situé aux Issambres. Ce programme offre une combinaison d'activités nautiques et de découvertes de la plage, favorisant le développement personnel et la socialisation. Le séjour est encadré par des professionnels qualifiés, garantissant sécurité et bien-être pour chaque participant. Les enfants auront l'opportunité d'explorer divers aspects de l'environnement marin tout en s'amusant.",
+      "program_brief_pro": [
+        "Activités nautiques variées",
+        "Découverte de la plage et de l'environnement marin",
+        "Encadrement par des professionnels expérimentés"
+      ],
+      "educational_option_pro": "Ce séjour vise à développer l'autonomie des enfants tout en leur apprenant à respecter l'environnement et à travailler en équipe.",
+      "departure_city_info": "Départ à confirmer"
+    },
+    "kids": {
+      "title_kids": "Aqua' Mix : Aventure à la plage",
+      "short_description_kids": "Viens t'amuser à la plage avec Aqua' Mix !",
+      "description_kids": "Aqua' Mix, c'est une super aventure pour les 9-11 ans aux Issambres ! Tu vas pouvoir t'éclater avec plein d'activités nautiques et découvrir la plage. C'est l'occasion de te faire de nouveaux copains et de vivre des moments inoubliables au bord de la mer. Les animateurs sont là pour t'aider et te faire passer un super séjour en toute sécurité.",
+      "program_brief_kids": [
+        "Jeux et sports nautiques",
+        "Exploration de la plage",
+        "Nouveaux copains et fun garanti"
+      ],
+      "educational_option_kids": "Tu vas apprendre à mieux connaître la mer et à travailler en équipe avec tes copains.",
+      "departure_city_info_kids": "Départ à confirmer"
+    },
+    "generated_at": "2026-01-26T16:28:50.361Z",
+    "model": "gpt-4o"
+  },
+  {
+    "source_url": "https://ufoval.fol74.org/sejours-colonies-de-vacances-a-la-montagne/explore-mountain?av=1309",
+    "source_partner": "UFOVAL",
+    "age_min": 9,
+    "age_max": 12,
+    "location_name": "À déterminer",
+    "sessions_json": [
+      {
+        "start_date": "2026-07-19",
+        "end_date": "2026-07-25",
+        "price_base": 539,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-07-26",
+        "end_date": "2026-08-01",
+        "price_base": 539,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-02",
+        "end_date": "2026-08-08",
+        "price_base": 539,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-09",
+        "end_date": "2026-08-15",
+        "price_base": 539,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      }
+    ],
+    "pro": {
+      "title_pro": "Séjour Explore Mountain pour 9-12 ans",
+      "short_description_pro": "Un séjour multi-activités en montagne pour les jeunes explorateurs.",
+      "description_pro": "Explore Mountain est un séjour destiné aux enfants de 9 à 12 ans, offrant une immersion totale dans le cadre naturel des montagnes. Ce programme propose des activités variées, permettant aux participants de développer leur curiosité et leur esprit d'aventure. Encadrés par des professionnels, les enfants pourront explorer la nature en toute sécurité, tout en apprenant à respecter l'environnement et à travailler en équipe.",
+      "program_brief_pro": [
+        "Randonnées et découvertes de la faune",
+        "Ateliers de sensibilisation à l'environnement",
+        "Activités d'aventure encadrées"
+      ],
+      "educational_option_pro": "Les enfants développeront des compétences en orientation, apprendront à respecter la nature et à coopérer avec leurs pairs.",
+      "departure_city_info": "Départ à confirmer"
+    },
+    "kids": {
+      "title_kids": "Explore Mountain : Aventures en montagne",
+      "short_description_kids": "Pars à l'aventure en montagne avec Explore Mountain !",
+      "description_kids": "Explore Mountain, c'est le top pour les 9-12 ans qui aiment l'aventure ! Viens découvrir la montagne avec des randos, des jeux et plein d'activités fun. Tu vas rencontrer plein de nouveaux copains et vivre des moments incroyables dans la nature. Les animateurs sont là pour t'accompagner et te faire vivre un séjour génial en toute sécurité.",
+      "program_brief_kids": [
+        "Randos et jeux en plein air",
+        "Découverte des animaux de la montagne",
+        "Nouveaux amis et aventures"
+      ],
+      "educational_option_kids": "Tu apprendras à te repérer en montagne et à protéger la nature avec tes copains.",
+      "departure_city_info_kids": "Départ à confirmer"
+    },
+    "generated_at": "2026-01-26T16:28:50.361Z",
+    "model": "gpt-4o"
+  },
+  {
+    "source_url": "https://ufoval.fol74.org/sejours-colonies-de-vacances-a-la-montagne/nature-picture?av=1278",
+    "source_partner": "UFOVAL",
+    "age_min": 11,
+    "age_max": 14,
+    "location_name": "Chamonix",
+    "sessions_json": [
+      {
+        "start_date": "2026-07-19",
+        "end_date": "2026-07-25",
+        "price_base": 640,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-02",
+        "end_date": "2026-08-08",
+        "price_base": 640,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-09",
+        "end_date": "2026-08-15",
+        "price_base": 640,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-16",
+        "end_date": "2026-08-22",
+        "price_base": 640,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      }
+    ],
+    "pro": {
+      "title_pro": "Séjour Nature Picture à Chamonix",
+      "short_description_pro": "Un séjour éducatif axé sur la découverte de la nature pour les 11-14 ans.",
+      "description_pro": "Nature Picture est un séjour unique pour les jeunes de 11 à 14 ans, situé à Chamonix. Ce programme met l'accent sur la découverte de la nature et la photographie, permettant aux participants de développer leur créativité tout en apprenant à respecter l'environnement. Encadrés par des professionnels, les jeunes exploreront les paysages montagnards et apprendront les bases de la photographie en plein air.",
+      "program_brief_pro": [
+        "Ateliers de photographie en plein air",
+        "Exploration des paysages montagnards",
+        "Sensibilisation à l'environnement"
+      ],
+      "educational_option_pro": "Les participants apprendront à capturer la beauté de la nature tout en développant un regard critique et respectueux sur l'environnement.",
+      "departure_city_info": "Départ à confirmer"
+    },
+    "kids": {
+      "title_kids": "Nature Picture : Découverte et photo",
+      "short_description_kids": "Pars à Chamonix pour découvrir la nature et faire de la photo !",
+      "description_kids": "Nature Picture, c'est l'occasion de découvrir la nature et de t'initier à la photo si tu as entre 11 et 14 ans ! À Chamonix, tu vas explorer des paysages incroyables et apprendre à prendre des photos super cool. C'est aussi le moment de te faire de nouveaux amis et de partager des moments inoubliables dans la nature. Les animateurs sont là pour t'aider et te guider tout au long du séjour.",
+      "program_brief_kids": [
+        "Ateliers photo en plein air",
+        "Exploration de la montagne",
+        "Nouveaux amis et découvertes"
+      ],
+      "educational_option_kids": "Tu apprendras à prendre de belles photos et à respecter la nature avec tes copains.",
+      "departure_city_info_kids": "Départ à confirmer"
+    },
+    "generated_at": "2026-01-26T16:28:50.361Z",
+    "model": "gpt-4o"
+  },
+  {
+    "source_url": "https://ufoval.fol74.org/sejours-colonies-de-vacances-a-la-mer/aqua-fun?av=1323",
+    "source_partner": "UFOVAL",
+    "age_min": 12,
+    "age_max": 14,
+    "location_name": "Les Issambres",
+    "sessions_json": [
+      {
+        "start_date": "2026-07-18",
+        "end_date": "2026-07-31",
+        "price_base": 1350,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-03",
+        "end_date": "2026-08-09",
+        "price_base": 710,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-03",
+        "end_date": "2026-08-16",
+        "price_base": 1350,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-10",
+        "end_date": "2026-08-16",
+        "price_base": 710,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-17",
+        "end_date": "2026-08-23",
+        "price_base": 710,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-17",
+        "end_date": "2026-08-30",
+        "price_base": 1350,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-24",
+        "end_date": "2026-08-30",
+        "price_base": 710,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      }
+    ],
+    "pro": {
+      "title_pro": "Séjour Aqua' Fun aux Issambres",
+      "short_description_pro": "Un séjour dynamique axé sur la plongée et la plage pour les 12-14 ans.",
+      "description_pro": "Aqua' Fun est un programme conçu pour les jeunes de 12 à 14 ans, offrant une expérience enrichissante aux Issambres. Ce séjour met l'accent sur la plongée et les activités de plage, permettant aux participants de développer leur confiance en eux et leur esprit d'équipe. Encadrés par des professionnels, les jeunes exploreront le monde sous-marin en toute sécurité et apprendront à respecter l'environnement marin.",
+      "program_brief_pro": [
+        "Initiation à la plongée",
+        "Activités ludiques sur la plage",
+        "Encadrement professionnel"
+      ],
+      "educational_option_pro": "Les participants apprendront les bases de la plongée, développeront leur autonomie et renforceront leur respect pour l'environnement marin.",
+      "departure_city_info": "Départ à confirmer"
+    },
+    "kids": {
+      "title_kids": "Aqua' Fun : Plongée et plage",
+      "short_description_kids": "Viens plonger et t'amuser à la plage avec Aqua' Fun !",
+      "description_kids": "Aqua' Fun, c'est l'aventure parfaite pour les 12-14 ans qui aiment l'eau ! Aux Issambres, tu vas apprendre à plonger et profiter de la plage avec tes copains. C'est l'occasion de découvrir le monde sous-marin et de vivre des moments fun et inoubliables. Les animateurs sont là pour t'accompagner et te faire vivre un séjour génial en toute sécurité.",
+      "program_brief_kids": [
+        "Apprentissage de la plongée",
+        "Jeux et fun à la plage",
+        "Nouveaux amis et aventures"
+      ],
+      "educational_option_kids": "Tu apprendras à plonger et à respecter la mer tout en t'amusant avec tes copains.",
+      "departure_city_info_kids": "Départ à confirmer"
+    },
+    "generated_at": "2026-01-26T16:28:50.361Z",
+    "model": "gpt-4o"
+  },
+  {
+    "source_url": "https://ufoval.fol74.org/sejours-colonies-de-vacances-a-la-montagne/mountain-and-chill?av=1205",
+    "source_partner": "UFOVAL",
+    "age_min": 12,
+    "age_max": 15,
+    "location_name": "Thorens-Glières",
+    "sessions_json": [
+      {
+        "start_date": "2026-07-19",
+        "end_date": "2026-07-25",
+        "price_base": 705,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-07-19",
+        "end_date": "2026-08-01",
+        "price_base": 1295,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-07-26",
+        "end_date": "2026-08-01",
+        "price_base": 705,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-02",
+        "end_date": "2026-08-08",
+        "price_base": 705,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-02",
+        "end_date": "2026-08-15",
+        "price_base": 1295,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-09",
+        "end_date": "2026-08-15",
+        "price_base": 705,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-16",
+        "end_date": "2026-08-22",
+        "price_base": 705,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      }
+    ],
+    "pro": {
+      "title_pro": "Mountain and chill'",
+      "short_description_pro": "Séjour dynamique et sécurisé à Thorens-Glières pour les 12-15 ans.",
+      "description_pro": "Mountain and chill' offre aux jeunes de 12 à 15 ans une expérience en montagne alliant détente et activités dynamiques. Situé à Thorens-Glières, ce séjour garantit un encadrement professionnel et une sécurité optimale. Les participants profiteront d'activités variées, favorisant le développement personnel et l'inclusion. Plusieurs sessions sont disponibles tout l'été.",
+      "program_brief_pro": [
+        "Randonnées en montagne",
+        "Ateliers de camping",
+        "Activités de sensation"
+      ],
+      "educational_option_pro": "Ce séjour encourage le développement de l'autonomie et de l'esprit d'équipe à travers des activités de plein air et des ateliers pratiques.",
+      "departure_city_info": "Départ à confirmer"
+    },
+    "kids": {
+      "title_kids": "Mountain and chill'",
+      "short_description_kids": "Viens t'amuser à la montagne avec des copains !",
+      "description_kids": "Prêt pour l'aventure à Thorens-Glières ? Mountain and chill' est le séjour parfait pour les 12-15 ans qui aiment bouger et s'amuser. Tu pourras faire des randos, camper sous les étoiles et vivre des sensations fortes. Avec 7 sessions, il y a plein de moments fun à partager avec tes nouveaux amis.",
+      "program_brief_kids": [
+        "Randos cool",
+        "Nuits sous tente",
+        "Activités qui décoiffent"
+      ],
+      "educational_option_kids": "Tu apprendras à camper et à t'entraider avec tes copains.",
+      "departure_city_info_kids": "Départ à confirmer"
+    },
+    "generated_at": "2026-01-26T16:28:50.361Z",
+    "model": "gpt-4o"
+  },
+  {
+    "source_url": "https://ufoval.fol74.org/sejours-colonies-de-vacances-a-la-montagne/dh-experience-11-13-ans?av=1373",
+    "source_partner": "UFOVAL",
+    "age_min": 11,
+    "age_max": 13,
+    "location_name": "À déterminer",
+    "sessions_json": [
+      {
+        "start_date": "2026-07-19",
+        "end_date": "2026-07-25",
+        "price_base": 780,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-02",
+        "end_date": "2026-08-15",
+        "price_base": 1450,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-02",
+        "end_date": "2026-08-22",
+        "price_base": 1870,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-09",
+        "end_date": "2026-08-15",
+        "price_base": 780,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-09",
+        "end_date": "2026-08-22",
+        "price_base": 1450,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-16",
+        "end_date": "2026-08-22",
+        "price_base": 780,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-23",
+        "end_date": "2026-08-28",
+        "price_base": 650,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      }
+    ],
+    "pro": {
+      "title_pro": "DH Experience 11-13 ans",
+      "short_description_pro": "Séjour VTT et adrénaline pour les jeunes sportifs de 11 à 13 ans.",
+      "description_pro": "DH Experience est un séjour spécialement conçu pour les jeunes de 11 à 13 ans passionnés de VTT et de sensations fortes. Encadré par des professionnels, ce programme garantit sécurité et apprentissage dans un environnement stimulant. Les participants développeront leurs compétences sportives tout en profitant d'activités variées et d'un cadre naturel exceptionnel.",
+      "program_brief_pro": [
+        "Initiation au VTT",
+        "Parcours d'adrénaline",
+        "Encadrement professionnel"
+      ],
+      "educational_option_pro": "Les jeunes apprendront les techniques de base du VTT et développeront leur confiance en soi grâce à des activités sportives encadrées.",
+      "departure_city_info": "Départ à confirmer"
+    },
+    "kids": {
+      "title_kids": "DH Experience 11-13 ans",
+      "short_description_kids": "Du VTT et des sensations fortes pour les 11-13 ans !",
+      "description_kids": "Si tu aimes le VTT et l'adrénaline, DH Experience est fait pour toi ! Ce séjour te permettra de t'éclater sur des parcours de VTT avec d'autres jeunes de ton âge. Encadré par des pros, tu apprendras plein de trucs cools et tu te feras de nouveaux amis.",
+      "program_brief_kids": [
+        "VTT fun",
+        "Parcours qui décoiffent",
+        "Super encadrants"
+      ],
+      "educational_option_kids": "Tu vas devenir un pro du VTT et gagner en confiance.",
+      "departure_city_info_kids": "Départ à confirmer"
+    },
+    "generated_at": "2026-01-26T16:28:50.361Z",
+    "model": "gpt-4o"
+  },
+  {
+    "source_url": "https://ufoval.fol74.org/sejours-colonies-de-vacances-a-la-mer/sperienza-in-corsica-1?av=1123",
+    "source_partner": "UFOVAL",
+    "age_min": 14,
+    "age_max": 17,
+    "location_name": "Saint-Florent (Corse)",
+    "sessions_json": [
+      {
+        "start_date": "2026-07-18",
+        "end_date": "2026-07-31",
+        "price_base": 1415,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-03",
+        "end_date": "2026-08-16",
+        "price_base": 1415,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-17",
+        "end_date": "2026-08-30",
+        "price_base": 1415,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      }
+    ],
+    "pro": {
+      "title_pro": "Sperienza in Corsica",
+      "short_description_pro": "Séjour multi-activités en Corse pour les 14-17 ans.",
+      "description_pro": "Sperienza in Corsica propose aux jeunes de 14 à 17 ans un séjour riche en découvertes et en activités variées. Situé à Saint-Florent, ce programme allie plongée, randonnée en montagne et exploration culturelle. Les participants bénéficieront d'un encadrement de qualité et d'une sécurité renforcée pour profiter pleinement de leur séjour.",
+      "program_brief_pro": [
+        "Plongée sous-marine",
+        "Randonnées en montagne",
+        "Découvertes culturelles"
+      ],
+      "educational_option_pro": "Ce séjour permet aux jeunes de développer leur curiosité et leur esprit d'initiative à travers des activités diversifiées et enrichissantes.",
+      "departure_city_info": "Départ à confirmer"
+    },
+    "kids": {
+      "title_kids": "Sperienza in Corsica",
+      "short_description_kids": "Une aventure inoubliable en Corse pour les 14-17 ans !",
+      "description_kids": "Pars à l'aventure en Corse avec Sperienza in Corsica ! Ce séjour te fera découvrir la plongée, les randos en montagne et plein d'autres activités super cool. Avec des copains de ton âge, tu vivras des moments inoubliables dans un cadre magnifique.",
+      "program_brief_kids": [
+        "Plongée fun",
+        "Randos géniales",
+        "Découvertes surprenantes"
+      ],
+      "educational_option_kids": "Tu découvriras la plongée et apprendras plein de choses sur la nature.",
+      "departure_city_info_kids": "Départ à confirmer"
+    },
+    "generated_at": "2026-01-26T16:28:50.361Z",
+    "model": "gpt-4o"
+  },
+  {
+    "source_url": "https://ufoval.fol74.org/sejours-colonies-de-vacances-a-la-mer/destination-soleil?av=1111",
+    "source_partner": "UFOVAL",
+    "age_min": 15,
+    "age_max": 17,
+    "location_name": "Saint-Raphaël",
+    "sessions_json": [
+      {
+        "start_date": "2026-07-18",
+        "end_date": "2026-07-31",
+        "price_base": 1390,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-03",
+        "end_date": "2026-08-16",
+        "price_base": 1390,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-17",
+        "end_date": "2026-08-30",
+        "price_base": 1390,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      }
+    ],
+    "pro": {
+      "title_pro": "Destination Soleil",
+      "short_description_pro": "Séjour nautique et plage à Saint-Raphaël pour les 15-17 ans.",
+      "description_pro": "Destination Soleil offre aux jeunes de 15 à 17 ans un séjour estival combinant activités nautiques et détente sur la plage à Saint-Raphaël. Les participants profiteront d'un encadrement sécurisé et de programmes adaptés pour favoriser l'apprentissage et le développement personnel. Ce séjour est idéal pour découvrir de nouvelles passions et renforcer les compétences sociales.",
+      "program_brief_pro": [
+        "Sports nautiques",
+        "Détente sur la plage",
+        "Encadrement sécurisé"
+      ],
+      "educational_option_pro": "Les jeunes développeront leur autonomie et apprendront à travailler en équipe à travers des activités nautiques encadrées.",
+      "departure_city_info": "Départ à confirmer"
+    },
+    "kids": {
+      "title_kids": "Destination Soleil",
+      "short_description_kids": "Du fun au soleil pour les 15-17 ans à Saint-Raphaël !",
+      "description_kids": "Envie de soleil et d'activités nautiques ? Destination Soleil à Saint-Raphaël est le séjour parfait pour toi ! Tu pourras faire du sport sur l'eau, te détendre à la plage et passer de super moments avec des copains. C'est l'occasion de te faire plein de souvenirs sous le soleil.",
+      "program_brief_kids": [
+        "Sports sur l'eau",
+        "Farniente à la plage",
+        "Super ambiance"
+      ],
+      "educational_option_kids": "Tu apprendras à te débrouiller et à travailler en équipe.",
+      "departure_city_info_kids": "Départ à confirmer"
+    },
+    "generated_at": "2026-01-26T16:28:50.361Z",
+    "model": "gpt-4o"
+  },
+  {
+    "source_url": "https://ufoval.fol74.org/sejours-colonies-de-vacances-a-la-montagne/annecy-element?av=1467",
+    "source_partner": "UFOVAL",
+    "age_min": 15,
+    "age_max": 17,
+    "location_name": "Duingt (Annecy)",
+    "sessions_json": [
+      {
+        "start_date": "2026-07-19",
+        "end_date": "2026-07-25",
+        "price_base": 755,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-07-26",
+        "end_date": "2026-08-01",
+        "price_base": 755,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-02",
+        "end_date": "2026-08-08",
+        "price_base": 755,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-09",
+        "end_date": "2026-08-15",
+        "price_base": 755,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-16",
+        "end_date": "2026-08-22",
+        "price_base": 755,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      }
+    ],
+    "pro": {
+      "title_pro": "Annecy Element",
+      "short_description_pro": "Séjour sensations fortes à Duingt-Annecy pour les 15-17 ans.",
+      "description_pro": "Annecy Element est un séjour dédié aux jeunes de 15 à 17 ans en quête de sensations fortes et d'activités dynamiques. Situé à Duingt-Annecy, ce programme offre un cadre sécurisé pour pratiquer le parapente et d'autres activités de plein air. Les participants bénéficieront d'un encadrement professionnel pour une expérience enrichissante et sécurisée.",
+      "program_brief_pro": [
+        "Initiation au parapente",
+        "Activités de plein air",
+        "Encadrement professionnel"
+      ],
+      "educational_option_pro": "Ce séjour permet aux jeunes de développer leur confiance en eux et d'acquérir de nouvelles compétences à travers des activités sportives encadrées.",
+      "departure_city_info": "Départ à confirmer"
+    },
+    "kids": {
+      "title_kids": "Annecy Element",
+      "short_description_kids": "Des sensations fortes à Annecy pour les 15-17 ans !",
+      "description_kids": "Prêt à vivre des sensations fortes à Annecy ? Annecy Element est le séjour parfait pour toi ! Tu pourras t'initier au parapente et participer à plein d'activités de plein air avec d'autres jeunes. C'est l'occasion de te dépasser et de te faire de nouveaux amis.",
+      "program_brief_kids": [
+        "Parapente génial",
+        "Activités en extérieur",
+        "Super encadrants"
+      ],
+      "educational_option_kids": "Tu gagneras en confiance et apprendras plein de nouvelles choses.",
+      "departure_city_info_kids": "Départ à confirmer"
+    },
+    "generated_at": "2026-01-26T16:28:50.361Z",
+    "model": "gpt-4o"
+  },
+  {
+    "source_url": "https://ufoval.fol74.org/sejours-colonies-de-vacances-a-locean/surf-sur-le-bassin?av=1695",
+    "source_partner": "UFOVAL",
+    "age_min": 15,
+    "age_max": 17,
+    "location_name": "Taussat",
+    "sessions_json": [
+      {
+        "start_date": "2026-08-02",
+        "end_date": "2026-08-13",
+        "price_base": 1095,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-14",
+        "end_date": "2026-08-27",
+        "price_base": 1265,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      }
+    ],
+    "pro": {
+      "title_pro": "Séjour Surf sur le Bassin pour adolescents",
+      "short_description_pro": "Un séjour de surf à Taussat pour les jeunes de 15 à 17 ans.",
+      "description_pro": "Ce séjour à Taussat est conçu pour les adolescents de 15 à 17 ans souhaitant s'initier ou se perfectionner au surf. Encadrés par des professionnels expérimentés, les participants bénéficieront d'un environnement sécurisé pour pratiquer ce sport nautique. L'accent est mis sur l'inclusion et le développement personnel à travers des activités de groupe. Deux sessions sont disponibles en août.",
+      "program_brief_pro": [
+        "Cours de surf encadrés par des professionnels",
+        "Activités de groupe pour renforcer la cohésion",
+        "Hébergement et restauration inclus"
+      ],
+      "educational_option_pro": "Les participants développeront des compétences en surf tout en apprenant l'importance du travail d'équipe et de la solidarité.",
+      "departure_city_info": "Départ à confirmer"
+    },
+    "kids": {
+      "title_kids": "Surf sur le Bassin",
+      "short_description_kids": "Viens surfer à Taussat avec nous !",
+      "description_kids": "Prêt à te jeter à l'eau ? Rejoins-nous à Taussat pour apprendre le surf avec des copains de ton âge. Tu seras entouré de pros qui t'aideront à devenir un as des vagues. En plus du surf, il y aura plein d'activités sympas pour s'amuser ensemble. Alors, prêt pour l'aventure ?",
+      "program_brief_kids": [
+        "Apprendre à surfer avec des pros",
+        "Jeux et activités en groupe",
+        "Nouveaux amis et fun garanti"
+      ],
+      "educational_option_kids": "Tu apprendras à surfer et à travailler en équipe avec tes nouveaux copains.",
+      "departure_city_info_kids": "Départ à confirmer"
+    },
+    "generated_at": "2026-01-26T16:28:50.361Z",
+    "model": "gpt-4o"
+  },
+  {
+    "source_url": "https://ufoval.fol74.org/sejours-colonies-de-vacances-a-la-montagne/moto-moto?av=1167",
+    "source_partner": "UFOVAL",
+    "age_min": 14,
+    "age_max": 17,
+    "location_name": "Carroz d'Arâches",
+    "sessions_json": [
+      {
+        "start_date": "2026-07-19",
+        "end_date": "2026-07-25",
+        "price_base": 780,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-07-19",
+        "end_date": "2026-08-01",
+        "price_base": 1350,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-07-26",
+        "end_date": "2026-08-01",
+        "price_base": 780,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-02",
+        "end_date": "2026-08-08",
+        "price_base": 780,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-02",
+        "end_date": "2026-08-15",
+        "price_base": 1350,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-02",
+        "end_date": "2026-08-22",
+        "price_base": 1840,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-09",
+        "end_date": "2026-08-15",
+        "price_base": 780,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-16",
+        "end_date": "2026-08-22",
+        "price_base": 780,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      }
+    ],
+    "pro": {
+      "title_pro": "Séjour Moto Moto pour adolescents",
+      "short_description_pro": "Un camp de moto à Carroz d'Arâches pour les jeunes de 14 à 17 ans.",
+      "description_pro": "Ce séjour à Carroz d'Arâches est destiné aux adolescents de 14 à 17 ans passionnés par les deux roues. Encadrés par des instructeurs qualifiés, les participants apprendront les bases de la conduite de moto en toute sécurité. Le programme inclut des ateliers de mécanique pour une compréhension approfondie des véhicules. Avec Plusieurs sessions sont disponibles tout l'été.",
+      "program_brief_pro": [
+        "Cours de conduite de moto sécurisés",
+        "Ateliers de mécanique",
+        "Hébergement et repas inclus"
+      ],
+      "educational_option_pro": "Les jeunes développeront des compétences en conduite et en mécanique, tout en apprenant les règles de sécurité routière.",
+      "departure_city_info": "Départ à confirmer"
+    },
+    "kids": {
+      "title_kids": "Moto Moto",
+      "short_description_kids": "En route pour l'aventure à moto !",
+      "description_kids": "Si tu aimes les motos, ce séjour est fait pour toi ! Viens à Carroz d'Arâches pour apprendre à conduire une moto avec des pros. Tu découvriras aussi comment elles fonctionnent grâce à des ateliers de mécanique. Prépare-toi à vivre des moments inoubliables avec tes nouveaux amis !",
+      "program_brief_kids": [
+        "Apprendre à piloter une moto",
+        "Ateliers pour comprendre les motos",
+        "Aventure et fun avec les copains"
+      ],
+      "educational_option_kids": "Tu apprendras à piloter une moto et à comprendre comment elle fonctionne.",
+      "departure_city_info_kids": "Départ à confirmer"
+    },
+    "generated_at": "2026-01-26T16:28:50.361Z",
+    "model": "gpt-4o"
+  },
+  {
+    "source_url": "https://ufoval.fol74.org/sejours-colonies-de-vacances-a-la-montagne/e-sport-and-sport?av=1730",
+    "source_partner": "UFOVAL",
+    "age_min": 12,
+    "age_max": 17,
+    "location_name": "Courchevel",
+    "sessions_json": [
+      {
+        "start_date": "2026-07-19",
+        "end_date": "2026-07-25",
+        "price_base": 569,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-07-26",
+        "end_date": "2026-08-01",
+        "price_base": 569,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      },
+      {
+        "start_date": "2026-08-02",
+        "end_date": "2026-08-08",
+        "price_base": 569,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      }
+    ],
+    "pro": {
+      "title_pro": "Séjour E-sport and Sport à Courchevel",
+      "short_description_pro": "Un séjour multiactivités pour les jeunes de 12 à 17 ans à Courchevel.",
+      "description_pro": "Ce séjour à Courchevel propose une combinaison unique d'activités sportives et d'e-sport pour les jeunes de 12 à 17 ans. Les participants bénéficieront d'un encadrement professionnel pour améliorer leurs compétences dans les deux domaines. Ce programme vise à promouvoir un équilibre entre le sport physique et le jeu vidéo, tout en favorisant la socialisation et le travail d'équipe. Plusieurs sessions sont disponibles tout l'été.",
+      "program_brief_pro": [
+        "Sessions d'e-sport encadrées",
+        "Activités sportives variées",
+        "Hébergement et repas inclus"
+      ],
+      "educational_option_pro": "Les participants apprendront à équilibrer les activités physiques et numériques, développant ainsi des compétences variées et un esprit d'équipe.",
+      "departure_city_info": "Départ à confirmer"
+    },
+    "kids": {
+      "title_kids": "E-sport and Sport",
+      "short_description_kids": "Viens t'amuser à Courchevel avec le sport et les jeux vidéo !",
+      "description_kids": "Si tu aimes le sport et les jeux vidéo, ce séjour est parfait pour toi ! À Courchevel, tu pourras jouer à tes jeux préférés et faire du sport avec des copains. C'est l'occasion de t'amuser tout en apprenant de nouvelles choses. Prépare-toi pour une semaine de fun et de découvertes !",
+      "program_brief_kids": [
+        "Jouer à tes jeux vidéo préférés",
+        "Faire du sport avec les copains",
+        "Apprendre et s'amuser ensemble"
+      ],
+      "educational_option_kids": "Tu apprendras à équilibrer le sport et les jeux vidéo tout en t'amusant.",
+      "departure_city_info_kids": "Départ à confirmer"
+    },
+    "generated_at": "2026-01-26T16:28:50.361Z",
+    "model": "gpt-4o"
+  },
+  {
+    "source_url": "https://ufoval.fol74.org/sejours-colonies-de-vacances-a-letranger/street-art-et-histoire?av=1723",
+    "source_partner": "UFOVAL",
+    "age_min": 12,
+    "age_max": 17,
+    "location_name": "Berlin",
+    "sessions_json": [
+      {
+        "start_date": "2026-08-07",
+        "end_date": "2026-08-13",
+        "price_base": 830,
+        "price_unit": "€",
+        "capacity_remaining": null,
+        "capacity_total": null,
+        "status": "open"
+      }
+    ],
+    "pro": {
+      "title_pro": "Séjour Street Art et Histoire à Berlin",
+      "short_description_pro": "Un séjour culturel à Berlin pour les jeunes de 12 à 17 ans.",
+      "description_pro": "Ce séjour à Berlin est conçu pour les jeunes de 12 à 17 ans intéressés par l'art urbain et l'histoire. Les participants découvriront le street art berlinois tout en explorant l'histoire riche de la ville. Encadrés par des professionnels, ils participeront à des ateliers créatifs et des visites culturelles. Une session est disponible en août.",
+      "program_brief_pro": [
+        "Découverte du street art berlinois",
+        "Visites culturelles et historiques",
+        "Ateliers créatifs encadrés"
+      ],
+      "educational_option_pro": "Les jeunes développeront leur sens artistique et leur compréhension de l'histoire à travers des activités immersives.",
+      "departure_city_info": "Départ à confirmer"
+    },
+    "kids": {
+      "title_kids": "Street Art et Histoire",
+      "short_description_kids": "Pars à Berlin pour découvrir le street art et l'histoire !",
+      "description_kids": "Envie de découvrir Berlin ? Ce séjour est fait pour toi ! Tu pourras explorer le street art et apprendre plein de choses sur l'histoire de cette ville fascinante. Avec des ateliers créatifs et des visites passionnantes, tu ne t'ennuieras jamais. Rejoins-nous pour une aventure incroyable !",
+      "program_brief_kids": [
+        "Découvrir le street art",
+        "Visiter des lieux historiques",
+        "Créer et s'amuser avec des ateliers"
+      ],
+      "educational_option_kids": "Tu apprendras l'art urbain et l'histoire de Berlin en t'amusant.",
+      "departure_city_info_kids": "Départ à confirmer"
+    },
+    "generated_at": "2026-01-26T16:28:50.361Z",
+    "model": "gpt-4o"
+  }
+]
