@@ -17,6 +17,8 @@ export interface Stay {
   published: boolean;
   createdAt: string;
   updatedAt: string;
+  departureCity?: string | null; // Ville de départ (optionnel)
+  educationalOption?: string | null; // Objectifs éducatifs (optionnel)
   sessions?: StaySession[];
   nextSessionStart?: string | null;
 }

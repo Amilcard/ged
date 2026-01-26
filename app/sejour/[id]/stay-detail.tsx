@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, MapPin, Home, Users, Calendar, Clock, ChevronRight, Tag, Heart, Share2 } from 'lucide-react';
+import { ArrowLeft, MapPin, Home, Users, Calendar, Clock, ChevronRight, Tag, Heart, Share2, Bus, GraduationCap } from 'lucide-react';
 import type { Stay, StaySession } from '@/lib/types';
 import { formatDateLong, getWishlistMotivation, addToWishlist } from '@/lib/utils';
 import { useApp } from '@/components/providers';
@@ -220,6 +220,32 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
                   <h3 className="font-semibold text-primary">Encadrement</h3>
                 </div>
                 <p className="text-sm text-primary-600">{stay?.supervision ?? ''}</p>
+              </div>
+            </div>
+
+            {/* Ville de départ + Option suivi éducatif */}
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="bg-white rounded-xl shadow-card p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <Bus className="w-5 h-5 text-accent" />
+                  <h3 className="font-semibold text-primary">
+                    {isKids ? 'On part d\'où ?' : 'Ville de départ'}
+                  </h3>
+                </div>
+                <p className="text-sm text-primary-600">
+                  {stay?.departureCity || 'Départ : à confirmer'}
+                </p>
+              </div>
+              <div className="bg-white rounded-xl shadow-card p-5">
+                <div className="flex items-center gap-2 mb-3">
+                  <GraduationCap className="w-5 h-5 text-accent" />
+                  <h3 className="font-semibold text-primary">
+                    {isKids ? 'Suivi pendant le séjour' : 'Option suivi éducatif'}
+                  </h3>
+                </div>
+                <p className="text-sm text-primary-600">
+                  {stay?.educationalOption || 'Option non disponible pour ce séjour'}
+                </p>
               </div>
             </div>
           </div>

@@ -44,9 +44,11 @@ export default async function StayPage({ params }: { params: Promise<{ id: strin
     published: stay.published,
     createdAt: stay.createdAt.toISOString(),
     updatedAt: stay.updatedAt.toISOString(),
+    departureCity: (stay as any).departureCity || null,
+    educationalOption: (stay as any).educationalOption || null,
     price_base: stay.priceFrom,
     price_unit: '€',
-    pro_price_note: stay.priceFrom ? null : 'Tarif communiqué aux professionnels',
+    pro_price_note: stay.priceFrom ? undefined : 'Tarif communiqué aux professionnels',
     sessions: stay.sessions.map(s => ({
       id: s.id,
       stayId: s.stayId,
