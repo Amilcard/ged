@@ -3,7 +3,21 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, MapPin, Home, Users, Calendar, Clock, ChevronRight, Tag, Heart, Share2, Bus, GraduationCap, Download } from 'lucide-react';
+import {
+  ArrowLeft,
+  MapPin,
+  Home,
+  Users,
+  Calendar,
+  Clock,
+  ChevronRight,
+  Tag,
+  Heart,
+  Share2,
+  Bus,
+  GraduationCap,
+  Download,
+} from 'lucide-react';
 import type { Stay, StaySession } from '@/lib/types';
 import { formatDateLong, getWishlistMotivation, addToWishlist } from '@/lib/utils';
 import { useApp } from '@/components/providers';
