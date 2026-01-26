@@ -46,6 +46,7 @@ export default async function StayPage({ params }: { params: Promise<{ id: strin
     updatedAt: stay.updatedAt.toISOString(),
     departureCity: (stay as any).departureCity || null,
     educationalOption: (stay as any).educationalOption || null,
+    pdfUrl: (stay as any).sourcePdfPath || null,
     price_base: stay.priceFrom,
     price_unit: '€',
     pro_price_note: stay.priceFrom ? undefined : 'Tarif communiqué aux professionnels',

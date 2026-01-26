@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowLeft, MapPin, Home, Users, Calendar, Clock, ChevronRight, Tag, Heart, Share2, Bus, GraduationCap } from 'lucide-react';
+import { ArrowLeft, MapPin, Home, Users, Calendar, Clock, ChevronRight, Tag, Heart, Share2, Bus, GraduationCap, Download } from 'lucide-react';
 import type { Stay, StaySession } from '@/lib/types';
 import { formatDateLong, getWishlistMotivation, addToWishlist } from '@/lib/utils';
 import { useApp } from '@/components/providers';
@@ -84,6 +84,21 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
           >
             <Share2 className="w-5 h-5" />
           </button>
+          {stay?.pdfUrl ? (
+            <a
+              href={stay.pdfUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-10 h-10 bg-white/90 rounded-full flex items-center justify-center text-primary hover:bg-white transition-all"
+              aria-label="Télécharger le PDF"
+            >
+              <Download className="w-5 h-5" />
+            </a>
+          ) : (
+            <span className="text-xs text-white/80 bg-black/30 px-2 py-1 rounded-full">
+              PDF bientôt disponible
+            </span>
+          )}
           <button
             onClick={handleToggleWishlist}
             className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${

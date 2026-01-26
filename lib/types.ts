@@ -19,6 +19,7 @@ export interface Stay {
   updatedAt: string;
   departureCity?: string | null; // Ville de départ (optionnel)
   educationalOption?: string | null; // Objectifs éducatifs (optionnel)
+  pdfUrl?: string | null; // URL du PDF du séjour (optionnel)
   sessions?: StaySession[];
   nextSessionStart?: string | null;
 }
