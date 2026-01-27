@@ -7,7 +7,7 @@ import { Mountain, Users, Baby, RotateCcw } from 'lucide-react';
 
 const desktopNavItems = [
   { label: 'Accueil', route: '/' },
-  { label: 'Séjours', route: '/#sejours' },
+  { label: 'Séjours', route: '/sejours' },
   { label: 'Infos', route: '/infos' },
   { label: 'Espace pro', route: '/login' },
 ];
@@ -15,23 +15,6 @@ const desktopNavItems = [
 export function Header() {
   const { mode, setMode, reset, mounted, isAuthenticated, authUser } = useApp();
   const pathname = usePathname();
-  const router = useRouter();
-
-  const handleNavClick = (route: string, e: React.MouseEvent) => {
-    if (route === '/#sejours') {
-      e.preventDefault();
-      if (pathname === '/') {
-        const section = document.getElementById('sejours');
-        section?.scrollIntoView({ behavior: 'smooth' });
-      } else {
-        router.push('/');
-        setTimeout(() => {
-          const section = document.getElementById('sejours');
-          section?.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-      }
-    }
-  };
 
   return (
     <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-primary-100">
@@ -48,7 +31,6 @@ export function Header() {
             <Link
               key={item.route}
               href={item.route}
-              onClick={(e) => handleNavClick(item.route, e)}
               className={`text-sm font-medium transition-colors ${
                 pathname === item.route || (item.route === '/' && pathname === '/')
                   ? 'text-primary'

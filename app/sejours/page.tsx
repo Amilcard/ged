@@ -1,44 +1,49 @@
-import { supabase } from '@/lib/supabase';
+import { prisma } from '@/lib/db';
 import { Header } from '@/components/header';
 import { BottomNav } from '@/components/bottom-nav';
-import { StayCard } from '@/components/stay-card';
+import { HomeContent } from '../home-content';
 
 export const dynamic = 'force-dynamic';
 
 export default async function SejoursPage() {
-  const { data: activities, error } = await supabase
-    .from("v_activity_with_sessions")
-    .select("*")
-    .eq("status", "published");
+  const stays = await prisma.stay.findMany({
+    where: { published: true },
+    include: {
+      sessions: {
+        where: { startDate: { gte: new Date() } },
+        orderBy: { startDate: 'asc' },
+        take: 1,
+      },
+    },
+    orderBy: { createdAt: 'desc' },
+  });
 
-  if (error) {
-    console.error('Error fetching activities:', error);
-    return (
-      <div className="min-h-screen bg-background pb-20 md:pb-0">
-        <Header />
-        <main className="container mx-auto px-4 py-6">
-          <p className="text-center text-destructive">Erreur lors du chargement des séjours.</p>
-        </main>
-        <BottomNav />
-      </div>
-    );
-  }
+  // Prix exclus du SSR (sécurité : visible uniquement pour pro authentifié)
+  const staysData = stays.map(stay => ({
+    id: stay.id,
+    slug: stay.slug,
+    title: stay.title,
+    descriptionShort: stay.descriptionShort,
+    programme: stay.programme as string[],
+    geography: stay.geography,
+    accommodation: stay.accommodation,
+    supervision: stay.supervision,
+    durationDays: stay.durationDays,
+    period: stay.period,
+    ageMin: stay.ageMin,
+    ageMax: stay.ageMax,
+    themes: stay.themes as string[],
+    imageCover: stay.imageCover,
+    published: stay.published,
+    createdAt: stay.createdAt.toISOString(),
+    updatedAt: stay.updatedAt.toISOString(),
+    nextSessionStart: stay.sessions[0]?.startDate?.toISOString() ?? null,
+  }));
 
   return (
     <div className="min-h-screen bg-background pb-20 md:pb-0">
       <Header />
-      <main className="container mx-auto px-4 py-6">
-        <h1 className="text-2xl font-bold mb-6">Nos séjours</h1>
-        {activities && activities.length > 0 ? (
-          <div className="grid grid-cols-1 gap-4">
-            {activities.map((activity) => (
-              <StayCard key={activity.id} stay={activity} />
-            ))}
-          </div>
-        ) : (
-          <p className="text-center text-muted-foreground">Aucun séjour disponible pour le moment.</p>
-        )}
-      </main>
+      <HomeContent stays={staysData} />
       <BottomNav />
     </div>
   );
