@@ -79,6 +79,7 @@ model StaySession {
   stay       Stay      @relation(fields: [stayId], references: [id], onDelete: Cascade)
   bookings   Booking[]
 
+  @@unique([stayId, startDate, endDate])
   @@map("stay_sessions")
 }
 

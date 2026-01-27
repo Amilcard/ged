@@ -30,6 +30,7 @@ export function BookingModal({ stay, sessions, onClose }: BookingModalProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [bookingId, setBookingId] = useState('');
+  const [showAllSessions, setShowAllSessions] = useState(false);
 
   const [step1, setStep1] = useState<Step1Data>({
     organisation: '',
@@ -122,7 +123,7 @@ export function BookingModal({ stay, sessions, onClose }: BookingModalProps) {
             <div className="space-y-4">
               <h3 className="font-medium text-primary">Choisir une session</h3>
               <div className="space-y-2">
-                {sessions?.map(session => {
+                {sessionsUnique.slice(0, showAllSessions ? undefined : 4).map(session => {
                   const isFull = (session?.seatsLeft ?? 0) === 0;
                   return (
                     <label
@@ -156,6 +157,14 @@ export function BookingModal({ stay, sessions, onClose }: BookingModalProps) {
                   );
                 })}
               </div>
+              {sessionsUnique.length > 4 && !showAllSessions && (
+                <button
+                  onClick={() => setShowAllSessions(true)}
+                  className="w-full py-2 text-sm text-accent hover:underline"
+                >
+                  Voir toutes les dates ({sessionsUnique.length - 4} autres)
+                </button>
+              )}
               <button
                 onClick={() => setStep(1)}
                 disabled={!selectedSessionId}

@@ -15,3 +15,11 @@ tsconfig.tsbuildinfo
 out/ufoval/*.json
 out/ufoval/_debug_html/
 out/ufoval/_debug_html_sessions/
+
+# Local/IA
+CLAUDE.md
+scripts/ufoval/merge-departures-and-sessions.js
+
+# Local/IA
+CLAUDE.md
+scripts/ufoval/merge-departures-and-sessions.js

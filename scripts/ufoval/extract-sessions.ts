@@ -95,9 +95,10 @@ function extractFromTables($: cheerio.CheerioAPI): SessionRow[] {
       const promo = euros[1] ? euroToNumber(euros[1]) : null;
 
       const dateCell =
+        cells.find((c) => /(\d{1,2}\/\d{1,2})\s*-\s*(\d{1,2}\/\d{1,2})/.test(c)) ||
         cells.find((c) => /\d{1,2}\/\d{1,2}\/\d{2,4}/.test(c)) ||
         cells.find((c) => /\d{1,2}\s+\w+/i.test(c)) ||
-        "";
+        cells[0] || "";
 
       rows.push({
         date_text: dateCell || raw,

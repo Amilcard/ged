@@ -30,6 +30,7 @@ export async function GET(
     return NextResponse.json({
       id: stay.id,
       slug: stay.slug,
+      sourceUrl: stay.sourceUrl,
       title: stay.title,
       descriptionShort: stay.descriptionShort,
       programme: stay.programme,
