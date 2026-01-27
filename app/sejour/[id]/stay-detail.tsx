@@ -269,12 +269,48 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
                 <div className="flex items-center gap-2 mb-3">
                   <GraduationCap className="w-5 h-5 text-accent" />
                   <h3 className="font-semibold text-primary">
-                    {isKids ? 'Suivi pendant le séjour' : 'Option suivi éducatif'}
+                    {isKids ? "Un encadrement en plus" : "Option d'accompagnement (G&D)"}
                   </h3>
                 </div>
-                <p className="text-sm text-primary-600">
-                  {stay?.educationalOption || 'Option non disponible pour ce séjour'}
-                </p>
+                {isKids ? (
+                  <div className="text-sm text-primary-600 space-y-2">
+                    <p>
+                      Si tu en as besoin, on peut te proposer un accompagnement renforcé pour que le séjour se passe au mieux.
+                    </p>
+                    <p className="text-primary-500">
+                      Un adulte référent et ta structure valident avec nous ce qui est le mieux pour toi.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="text-sm text-primary-600 space-y-3">
+                    <p>
+                      Groupe & Découverte peut proposer un accompagnement renforcé selon le profil du jeune (validation avec la structure).
+                    </p>
+
+                    <div className="bg-primary-50 rounded-lg p-3 border border-primary-100">
+                      <p className="font-medium text-primary mb-2">Surcoût encadrement (selon niveau) :</p>
+                      <div className="flex gap-3">
+                        <span className="px-2 py-1 bg-white rounded border text-primary-700">0 €</span>
+                        <span className="px-2 py-1 bg-white rounded border text-primary-700">+49 €</span>
+                        <span className="px-2 py-1 bg-white rounded border text-primary-700">+70 €</span>
+                      </div>
+                      <p className="text-xs text-primary-500 mt-2 italic">
+                        Le surcoût exact est confirmé au moment de la réservation (côté travailleurs sociaux).
+                      </p>
+                    </div>
+
+                    {stay?.educationalOption && (
+                      <details>
+                        <summary className="cursor-pointer text-accent font-medium">
+                          Détails de l'accompagnement possible
+                        </summary>
+                        <p className="mt-2 text-primary-600">
+                          {stay.educationalOption}
+                        </p>
+                      </details>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>
