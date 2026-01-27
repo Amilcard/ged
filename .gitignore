@@ -10,3 +10,7 @@ dist
 build
 .turbo
 tsconfig.tsbuildinfo
+
+# UFOVAL outputs
+out/ufoval/*.json
+out/ufoval/_debug_html/
