@@ -53,6 +53,15 @@ export default async function StayPage({ params }: { params: Promise<{ id: strin
     departureCity: (stay as any).departureCity || null,
     educationalOption: (stay as any).educationalOption || null,
 
+    // Champs GEO/Hébergement enrichis
+    geoLabel: (stay as any).geoLabel || null,
+    geoPrecision: (stay as any).geoPrecision || null,
+    accommodationLabel: (stay as any).accommodationLabel || null,
+
+    // Villes de départ (contentKids JSON)
+    contentKids: stay.contentKids || null,
+    sourceUrl: (stay as any).sourceUrl || null,
+
     // PDF (sourcePdfPath côté DB -> pdfUrl côté UI)
     pdfUrl: (stay as any).sourcePdfPath || null,
 
