@@ -307,15 +307,9 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
               <div className="bg-white rounded-xl shadow-card p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <Bus className="w-5 h-5 text-accent" />
-                  <h3 className="font-semibold text-primary">
-                    {isKids ? 'On part d\'où ?' : 'Ville de départ'}
-                  </h3>
+                  <h3 className="font-semibold text-primary">Villes de départ</h3>
                 </div>
-                {isKids ? (
-                  <p className="text-sm text-primary-600">
-                    {stay?.departureCity || 'Départ à confirmer'}
-                  </p>
-                ) : enrichment?.departures && enrichment.departures.length > 0 ? (
+                {enrichment?.departures && enrichment.departures.length > 0 ? (
                   <div className="space-y-2">
                     <p className="text-sm text-primary-600">
                       <span className="font-medium">{enrichment.departures.length} villes de départ</span> disponibles
@@ -326,9 +320,11 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
                     >
                       Voir la liste complète <ChevronRight className="w-3 h-3" />
                     </button>
-                    <p className="text-xs text-primary-500">
-                      À partir de <span className="font-semibold">0€</span> (Sans transport)
-                    </p>
+                    {!isKids && (
+                      <p className="text-xs text-primary-500">
+                        À partir de <span className="font-semibold">0€</span> (Sans transport)
+                      </p>
+                    )}
                   </div>
                 ) : (
                   <p className="text-sm text-primary-600">
@@ -452,7 +448,7 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
         />
       )}
 
-      {/* Modal villes de départ (Pro only) */}
+      {/* Modal villes de départ */}
       {showDepartures && enrichment?.departures && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setShowDepartures(false)}>
           <div className="bg-white rounded-xl max-w-md w-full max-h-[80vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
@@ -463,14 +459,24 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
               </button>
             </div>
             <div className="p-4 space-y-2">
-              {enrichment.departures.map((dep, i) => (
-                <div key={i} className="flex items-center justify-between p-3 border border-primary-100 rounded-lg">
-                  <span className="text-sm text-primary capitalize">{dep.city}</span>
-                  <span className="text-sm font-medium text-accent">
-                    {dep.extra_eur === 0 ? 'Sans transport' : `+${dep.extra_eur}€`}
-                  </span>
-                </div>
-              ))}
+              {isKids && (
+                <p className="text-xs text-primary-500 italic mb-3">
+                  Choix confirmé lors de l&apos;inscription
+                </p>
+              )}
+              {enrichment.departures
+                .slice()
+                .sort((a, b) => a.city.localeCompare(b.city))
+                .map((dep, i) => (
+                  <div key={i} className={`flex items-center justify-between p-3 border border-primary-100 rounded-lg`}>
+                    <span className="text-sm text-primary capitalize">{dep.city}</span>
+                    {!isKids && (
+                      <span className="text-sm font-medium text-accent">
+                        {dep.extra_eur === 0 ? 'Sans transport' : `+${dep.extra_eur}€`}
+                      </span>
+                    )}
+                  </div>
+                ))}
             </div>
           </div>
         </div>
