@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -17,6 +17,7 @@ import {
   Bus,
   GraduationCap,
   Download,
+  X,
 } from 'lucide-react';
 import type { Stay, StaySession } from '@/lib/types';
 import { formatDateLong, getWishlistMotivation, addToWishlist } from '@/lib/utils';
@@ -24,14 +25,48 @@ import { useApp } from '@/components/providers';
 import { BookingModal } from '@/components/booking-modal';
 import { WishlistModal } from '@/components/wishlist-modal';
 
-export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], price_base?: number | null, price_unit?: string, pro_price_note?: string } }) {
+// Types (pas de mention UFOVAL en commentaire)
+type DepartureData = { city: string; extra_eur: number };
+type SessionData = { date_text: string; base_price_eur: number | null; promo_price_eur: number | null };
+type EnrichmentData = { source_url: string; departures: DepartureData[]; sessions: SessionData[] };
+
+export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], price_base?: number | null, price_unit?: string, pro_price_note?: string, sourceUrl?: string | null } }) {
   const { mode, mounted, isInWishlist, toggleWishlist, refreshWishlist } = useApp();
   const [showBooking, setShowBooking] = useState(false);
   const [showWishlistModal, setShowWishlistModal] = useState(false);
   const [shareSuccess, setShareSuccess] = useState(false);
+  const [showDepartures, setShowDepartures] = useState(false);
+  const [enrichment, setEnrichment] = useState<EnrichmentData | null>(null);
   const isKids = mode === 'kids';
+  const isPro = !isKids;
   const slug = stay?.slug ?? '';
   const isLiked = mounted && isInWishlist(slug);
+
+  // Fetch enrichement (Pro uniquement, seulement si sourceUrl existe)
+  useEffect(() => {
+    if (!isPro) return;
+    const stayUrl = String((stay as any)?.sourceUrl ?? "").trim();
+    if (!stayUrl) return;
+
+    fetch('/api/ufoval-enrichment')
+      .then(r => r.json())
+      .then((data: { ok: boolean; generatedAt?: string; total?: number; items?: EnrichmentData[] }) => {
+        const list = Array.isArray(data?.items) ? data.items : [];
+        const match = list.find((x: any) => String(x?.source_url ?? "").trim() === stayUrl);
+        setEnrichment(match ?? null);
+      })
+      .catch(() => {});
+  }, [isPro, stay?.sourceUrl]);
+
+  // Calcul prix minimum (promo prioritaire, sinon base)
+  const minSessionPrice = (() => {
+    if (!enrichment?.sessions || enrichment.sessions.length === 0) return null;
+    const prices = enrichment.sessions
+      .map(s => s.promo_price_eur ?? s.base_price_eur)
+      .filter((n): n is number => n !== null && Number.isFinite(n));
+    if (prices.length === 0) return null;
+    return Math.min(...prices);
+  })();
 
   const handleToggleWishlist = () => {
     if (slug) toggleWishlist(slug);
@@ -165,10 +200,25 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
             </div>
             {/* Prix / note tarif (Pro) */}
             {mounted && !isKids && (
-              <div className="text-sm text-primary-500 italic">
-                {stay?.price_base == null
-                  ? (stay?.pro_price_note || "Tarif communiqué aux professionnels")
-                  : `${stay.price_base}${stay?.price_unit ? ` ${stay.price_unit}` : ""}`}
+              <div className="text-right">
+                {minSessionPrice !== null ? (
+                  <div>
+                    <div className="text-sm font-semibold text-accent">
+                      À partir de {minSessionPrice} €
+                    </div>
+                    <div className="text-xs text-primary-500">
+                      Sans transport (0€)
+                    </div>
+                  </div>
+                ) : stay?.price_base == null ? (
+                  <div className="text-sm text-primary-500 italic">
+                    {stay?.pro_price_note || "Tarif communiqué aux professionnels"}
+                  </div>
+                ) : (
+                  <div className="text-sm font-semibold text-accent">
+                    À partir de {stay.price_base} €
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -261,9 +311,30 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
                     {isKids ? 'On part d\'où ?' : 'Ville de départ'}
                   </h3>
                 </div>
-                <p className="text-sm text-primary-600">
-                  {stay?.departureCity || 'Départ : à confirmer'}
-                </p>
+                {isKids ? (
+                  <p className="text-sm text-primary-600">
+                    {stay?.departureCity || 'Départ à confirmer'}
+                  </p>
+                ) : enrichment?.departures && enrichment.departures.length > 0 ? (
+                  <div className="space-y-2">
+                    <p className="text-sm text-primary-600">
+                      <span className="font-medium">{enrichment.departures.length} villes de départ</span> disponibles
+                    </p>
+                    <button
+                      onClick={() => setShowDepartures(true)}
+                      className="text-xs text-accent hover:underline flex items-center gap-1"
+                    >
+                      Voir la liste complète <ChevronRight className="w-3 h-3" />
+                    </button>
+                    <p className="text-xs text-primary-500">
+                      À partir de <span className="font-semibold">0€</span> (Sans transport)
+                    </p>
+                  </div>
+                ) : (
+                  <p className="text-sm text-primary-600">
+                    {stay?.departureCity || 'Départ : à confirmer'}
+                  </p>
+                )}
               </div>
               <div className="bg-white rounded-xl shadow-card p-5">
                 <div className="flex items-center gap-2 mb-3">
@@ -379,6 +450,30 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
           staySlug={slug}
           stayUrl={typeof window !== 'undefined' ? window.location.href : ''}
         />
+      )}
+
+      {/* Modal villes de départ (Pro only) */}
+      {showDepartures && enrichment?.departures && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setShowDepartures(false)}>
+          <div className="bg-white rounded-xl max-w-md w-full max-h-[80vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+            <div className="sticky top-0 bg-white border-b border-primary-100 p-4 flex items-center justify-between">
+              <h2 className="font-semibold text-primary text-lg">Villes de départ</h2>
+              <button onClick={() => setShowDepartures(false)} className="p-1 hover:bg-primary-50 rounded">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-4 space-y-2">
+              {enrichment.departures.map((dep, i) => (
+                <div key={i} className="flex items-center justify-between p-3 border border-primary-100 rounded-lg">
+                  <span className="text-sm text-primary capitalize">{dep.city}</span>
+                  <span className="text-sm font-medium text-accent">
+                    {dep.extra_eur === 0 ? 'Sans transport' : `+${dep.extra_eur}€`}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       )}
     </main>
   );

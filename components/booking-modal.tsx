@@ -46,6 +46,11 @@ export function BookingModal({ stay, sessions, onClose }: BookingModalProps) {
   });
 
   const validSessions = sessions?.filter(s => (s?.seatsLeft ?? 0) > 0) ?? [];
+  // Supprimer les doublons stricts (même startDate ET même endDate)
+  const sessionsUnique = (sessions || []).filter((s, idx, arr) => {
+    const key = `${s.startDate}-${s.endDate}`;
+    return idx === arr.findIndex(x => `${x.startDate}-${x.endDate}` === key);
+  });
   const selectedSession = sessions?.find(s => s?.id === selectedSessionId);
 
   const isStep1Valid = step1.organisation && step1.socialWorkerName && step1.email && step1.phone;
