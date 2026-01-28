@@ -43,13 +43,20 @@ const config: Config = {
         sans: ['Inter', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
-        lg: '0.75rem',
-        md: '0.5rem',
-        sm: '0.25rem',
+        sm: '0.5rem',    // 8px
+        md: '0.75rem',   // 12px
+        lg: '1rem',      // 16px (augmenté pour look moderne)
+        xl: '1.25rem',   // 20px
+        '2xl': '1.5rem', // 24px
+        '3xl': '2rem',   // 32px
       },
       boxShadow: {
-        card: '0 2px 8px rgba(31, 59, 87, 0.08)',
-        'card-hover': '0 4px 16px rgba(31, 59, 87, 0.12)',
+        sm: '0 1px 2px rgba(0, 0, 0, 0.05)',
+        DEFAULT: '0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.06)',
+        md: '0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05)',
+        lg: '0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04)',
+        card: '0 4px 12px rgba(31, 59, 87, 0.1)',
+        'card-hover': '0 8px 24px rgba(31, 59, 87, 0.15)',
       },
     },
   },

@@ -53,13 +53,13 @@ export function Header() {
         <div className="flex items-center gap-3">
           {mounted && (
             <>
-              <div className="flex bg-primary-50 rounded-lg p-1">
+              <div className="flex bg-primary-50 rounded-xl p-1.5 gap-1">
                 <button
                   onClick={() => setMode('pro')}
-                  className={`px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-1.5 transition-all ${
+                  className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-1.5 transition-all duration-200 ${
                     mode === 'pro'
-                      ? 'bg-primary text-white shadow-sm'
-                      : 'text-primary-600 hover:text-primary'
+                      ? 'bg-primary text-white shadow-md'
+                      : 'text-primary-600 hover:text-primary hover:bg-primary-100/50'
                   }`}
                 >
                   <Users className="w-4 h-4" />
@@ -67,10 +67,10 @@ export function Header() {
                 </button>
                 <button
                   onClick={() => setMode('kids')}
-                  className={`px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-1.5 transition-all ${
+                  className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-1.5 transition-all duration-200 ${
                     mode === 'kids'
-                      ? 'bg-accent text-white shadow-sm'
-                      : 'text-primary-600 hover:text-primary'
+                      ? 'bg-accent text-white shadow-md'
+                      : 'text-primary-600 hover:text-primary hover:bg-primary-100/50'
                   }`}
                 >
                   <Baby className="w-4 h-4" />

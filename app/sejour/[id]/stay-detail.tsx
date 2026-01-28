@@ -30,33 +30,61 @@ type DepartureData = { city: string; extra_eur: number };
 type SessionData = { date_text: string; base_price_eur: number | null; promo_price_eur: number | null };
 type EnrichmentData = { source_url: string; departures: DepartureData[]; sessions: SessionData[] };
 
-export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], price_base?: number | null, price_unit?: string, pro_price_note?: string, sourceUrl?: string | null } }) {
+// Villes de départ standard (même liste pour tous les séjours)
+const STANDARD_CITIES = [
+  'Paris', 'Lyon', 'Lille', 'Marseille', 'Bordeaux', 'Rennes'
+];
+
+export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], price_base?: number | null, price_unit?: string, pro_price_note?: string, sourceUrl?: string | null, geoLabel?: string | null, geoPrecision?: string | null, accommodationLabel?: string | null, contentKids?: any } }) {
   const { mode, mounted, isInWishlist, toggleWishlist, refreshWishlist } = useApp();
   const [showBooking, setShowBooking] = useState(false);
   const [showWishlistModal, setShowWishlistModal] = useState(false);
   const [shareSuccess, setShareSuccess] = useState(false);
   const [showDepartures, setShowDepartures] = useState(false);
-  const [enrichment, setEnrichment] = useState<EnrichmentData | null>(null);
+
+  // Initialiser enrichment directement depuis stay.contentKids (données déjà en BDD)
+  const stayUrl = String((stay as any)?.sourceUrl ?? "").trim();
+  const contentKidsParsed = typeof stay?.contentKids === 'string' ? JSON.parse(stay.contentKids) : stay?.contentKids;
+  const allDepartureCities = contentKidsParsed?.departureCities ?? [];
+  // Filtrer les villes : uniquement la liste standard + "Sans transport"
+  const departureCities = allDepartureCities.filter((dc: DepartureData) =>
+    STANDARD_CITIES.some(std =>
+      dc.city.toLowerCase().includes(std.toLowerCase())
+    ) || dc.city === 'Sans transport'
+  );
+  const initialEnrichment = (stayUrl && departureCities && departureCities.length > 0) ? {
+    source_url: stayUrl,
+    departures: departureCities,
+    sessions: []
+  } : null;
+  const [enrichment, setEnrichment] = useState<EnrichmentData | null>(initialEnrichment);
   const isKids = mode === 'kids';
   const isPro = !isKids;
   const slug = stay?.slug ?? '';
   const isLiked = mounted && isInWishlist(slug);
 
-  // Fetch enrichement (Pro uniquement, seulement si sourceUrl existe)
+  // Fetch enrichment (sessions avec prix) en mode PRO - compléter les sessions si absent
   useEffect(() => {
     if (!isPro) return;
-    const stayUrl = String((stay as any)?.sourceUrl ?? "").trim();
     if (!stayUrl) return;
 
+    // On a déjà les villes de départ depuis contentKids, on fetche seulement pour les sessions si besoin
     fetch('/api/ufoval-enrichment')
       .then(r => r.json())
       .then((data: { ok: boolean; generatedAt?: string; total?: number; items?: EnrichmentData[] }) => {
         const list = Array.isArray(data?.items) ? data.items : [];
         const match = list.find((x: any) => String(x?.source_url ?? "").trim() === stayUrl);
-        setEnrichment(match ?? null);
+        if (match) {
+          // Conserver les villes de départ depuis contentKids, ajouter les sessions
+          setEnrichment({
+            source_url: match.source_url,
+            departures: initialEnrichment?.departures ?? match.departures,
+            sessions: match.sessions ?? []
+          });
+        }
       })
       .catch(() => {});
-  }, [isPro, stay?.sourceUrl]);
+  }, [isPro, stayUrl]);
 
   // Calcul prix minimum (promo prioritaire, sinon base)
   const minSessionPrice = (() => {
@@ -114,7 +142,7 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
   return (
     <main className="pb-12">
       {/* Hero */}
-      <section className="relative h-[40vh] min-h-[280px]">
+      <section className="relative h-[45vh] min-h-[320px]">
         <Image
           src={stay?.imageCover ?? '/og-image.png'}
           alt={stay?.title ?? ''}
@@ -122,13 +150,13 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-        
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
         {/* Action buttons (top right) */}
         <div className="absolute top-4 right-4 flex gap-2">
           <button
             onClick={handleShare}
-            className="w-10 h-10 bg-white/90 rounded-full flex items-center justify-center text-primary hover:bg-white transition-all"
+            className="w-11 h-11 bg-white/95 backdrop-blur rounded-xl flex items-center justify-center text-primary hover:bg-white transition-all shadow-sm"
             aria-label="Partager"
           >
             <Share2 className="w-5 h-5" />
@@ -138,47 +166,47 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
               href={stay.pdfUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-10 h-10 bg-white/90 rounded-full flex items-center justify-center text-primary hover:bg-white transition-all"
+              className="w-11 h-11 bg-white/95 backdrop-blur rounded-xl flex items-center justify-center text-primary hover:bg-white transition-all shadow-sm"
               aria-label="Télécharger le PDF"
             >
               <Download className="w-5 h-5" />
             </a>
           ) : (
-            <span className="text-xs text-white/80 bg-black/30 px-2 py-1 rounded-full">
+            <span className="text-xs text-white/90 bg-black/40 px-3 py-1.5 rounded-xl backdrop-blur-sm">
               PDF bientôt disponible
             </span>
           )}
           <button
             onClick={handleToggleWishlist}
-            className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+            className={`w-11 h-11 rounded-xl flex items-center justify-center transition-all shadow-sm ${
               isLiked
                 ? 'bg-red-500 text-white'
-                : 'bg-white/90 text-primary hover:bg-white hover:text-red-500'
+                : 'bg-white/95 backdrop-blur text-primary hover:bg-white hover:text-red-500'
             }`}
             aria-label={isLiked ? 'Retirer des envies' : 'Ajouter aux envies'}
           >
             <Heart className={`w-5 h-5 ${isLiked ? 'fill-current' : ''}`} />
           </button>
         </div>
-        
+
         {/* Share success toast */}
         {shareSuccess && (
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-green-500 text-white rounded-lg text-sm font-medium animate-in slide-in-from-top">
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 px-4 py-2 bg-green-500 text-white rounded-xl text-sm font-medium animate-in slide-in-from-top shadow-lg">
             Lien copié !
           </div>
         )}
 
         <div className="absolute bottom-0 left-0 right-0 p-6 max-w-6xl mx-auto">
-          <Link href="/" className="inline-flex items-center gap-1 text-white/80 text-sm mb-3 hover:text-white">
+          <Link href="/" className="inline-flex items-center gap-1 text-white/90 text-sm mb-3 hover:text-white transition-colors">
             <ArrowLeft className="w-4 h-4" /> Retour aux séjours
           </Link>
-          <h1 className="text-3xl md:text-4xl font-bold text-white">{stay?.title ?? ''}</h1>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white">{stay?.title ?? ''}</h1>
         </div>
       </section>
 
       <div className="max-w-6xl mx-auto px-4 -mt-8 relative z-10">
         {/* Quick Info Card */}
-        <div className="bg-white rounded-xl shadow-card p-6 mb-8">
+        <div className="bg-white rounded-xl shadow-card p-6 mb-8 md:mb-12">
           <div className="flex flex-wrap gap-4 items-center justify-between">
             <div className="flex flex-wrap gap-6 text-sm">
               <div className="flex items-center gap-2 text-primary-600">
@@ -203,7 +231,7 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
               <div className="text-right">
                 {minSessionPrice !== null ? (
                   <div>
-                    <div className="text-sm font-semibold text-accent">
+                    <div className="text-base font-bold text-accent">
                       À partir de {minSessionPrice} €
                     </div>
                     <div className="text-xs text-primary-500">
@@ -215,7 +243,7 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
                     {stay?.pro_price_note || "Tarif communiqué aux professionnels"}
                   </div>
                 ) : (
-                  <div className="text-sm font-semibold text-accent">
+                  <div className="text-base font-bold text-accent">
                     À partir de {stay.price_base} €
                   </div>
                 )}
@@ -226,16 +254,16 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="lg:col-span-2 space-y-8 md:space-y-10">
             {/* Description */}
-            <section className="bg-white rounded-xl shadow-card p-6">
-              <h2 className="text-xl font-semibold text-primary mb-4">
+            <section className="bg-white rounded-xl shadow-card p-6 md:p-8">
+              <h2 className="text-2xl md:text-3xl font-bold text-primary mb-4">
                 {isKids ? 'C\'est quoi ce séjour ?' : 'Présentation'}
               </h2>
               <p className="text-primary-600 leading-relaxed">{stay?.descriptionShort ?? ''}</p>
               <div className="flex flex-wrap gap-2 mt-4">
                 {themes.map(theme => (
-                  <span key={theme} className="flex items-center gap-1 px-3 py-1 bg-primary-50 text-primary-600 rounded-full text-sm">
+                  <span key={theme} className="flex items-center gap-1 px-3 py-1.5 bg-primary-50 text-primary-600 rounded-full text-sm font-medium border border-primary-100">
                     <Tag className="w-3 h-3" /> {theme}
                   </span>
                 ))}
@@ -243,14 +271,14 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
             </section>
 
             {/* Mini Programme */}
-            <section className="bg-white rounded-xl shadow-card p-6">
-              <h2 className="text-xl font-semibold text-primary mb-4">
+            <section className="bg-white rounded-xl shadow-card p-6 md:p-8">
+              <h2 className="text-2xl md:text-3xl font-bold text-primary mb-4">
                 {isKids ? 'Au programme' : 'Programme en bref'}
               </h2>
-              <ul className="space-y-2">
+              <ul className="space-y-3">
                 {miniProgramme.map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
-                    <ChevronRight className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
+                    <ChevronRight className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
                     <span className="text-primary-600">{item}</span>
                   </li>
                 ))}
@@ -261,14 +289,14 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
             </section>
 
             {/* Full Programme */}
-            <section className="bg-white rounded-xl shadow-card p-6">
-              <h2 className="text-xl font-semibold text-primary mb-4">
+            <section className="bg-white rounded-xl shadow-card p-6 md:p-8">
+              <h2 className="text-2xl md:text-3xl font-bold text-primary mb-4">
                 {isKids ? 'Tout le programme' : 'Programme détaillé'}
               </h2>
-              <ol className="space-y-3">
+              <ol className="space-y-4">
                 {programme.map((item, i) => (
-                  <li key={i} className="flex items-start gap-3 pb-3 border-b border-primary-100 last:border-0">
-                    <span className="w-6 h-6 bg-accent/10 text-accent text-xs font-semibold rounded-full flex items-center justify-center flex-shrink-0">
+                  <li key={i} className="flex items-start gap-4 pb-4 border-b border-primary-100 last:border-0">
+                    <span className="w-7 h-7 bg-accent/10 text-accent text-sm font-bold rounded-full flex items-center justify-center flex-shrink-0">
                       {i + 1}
                     </span>
                     <span className="text-primary-600">{item}</span>
@@ -278,66 +306,124 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
             </section>
 
             {/* 3 Columns - Lieu/Hébergement/Encadrement */}
-            <div className="grid md:grid-cols-3 gap-4">
-              <div className="bg-white rounded-xl shadow-card p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <MapPin className="w-5 h-5 text-accent" />
-                  <h3 className="font-semibold text-primary">Lieu</h3>
+            <div className="grid md:grid-cols-3 gap-4 md:gap-6">
+              <div className="bg-white rounded-xl shadow-sm p-5 border border-primary-50">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center flex-shrink-0">
+                    <MapPin className="w-6 h-6 text-accent" />
+                  </div>
+                  <h3 className="font-bold text-primary text-lg">Lieu</h3>
                 </div>
-                <p className="text-sm text-primary-600">{stay?.geography ?? ''}</p>
+                <p className="text-sm text-primary-600 font-medium">
+                  {(stay as any)?.geoLabel && (stay as any)?.geoPrecision
+                    ? `${ (stay as any).geoLabel } (${ (stay as any).geoPrecision })`
+                    : (stay as any)?.geoLabel || stay?.geography || ''}
+                </p>
               </div>
-              <div className="bg-white rounded-xl shadow-card p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <Home className="w-5 h-5 text-accent" />
-                  <h3 className="font-semibold text-primary">Hébergement</h3>
+              <div className="bg-white rounded-xl shadow-sm p-5 border border-primary-50">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center flex-shrink-0">
+                    <Home className="w-6 h-6 text-accent" />
+                  </div>
+                  <h3 className="font-bold text-primary text-lg">Hébergement</h3>
                 </div>
-                <p className="text-sm text-primary-600">{stay?.accommodation ?? ''}</p>
+                <p className="text-sm text-primary-600 font-medium">{(stay as any)?.accommodationLabel || stay?.accommodation || ''}</p>
               </div>
-              <div className="bg-white rounded-xl shadow-card p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <Users className="w-5 h-5 text-accent" />
-                  <h3 className="font-semibold text-primary">Encadrement</h3>
+              <div className="bg-white rounded-xl shadow-sm p-5 border border-primary-50">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center flex-shrink-0">
+                    <Users className="w-6 h-6 text-accent" />
+                  </div>
+                  <h3 className="font-bold text-primary text-lg">Encadrement</h3>
                 </div>
-                <p className="text-sm text-primary-600">{stay?.supervision ?? ''}</p>
+                <p className="text-sm text-primary-600 font-medium">{stay?.supervision ?? ''}</p>
               </div>
             </div>
 
             {/* Ville de départ + Option suivi éducatif */}
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="bg-white rounded-xl shadow-card p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <Bus className="w-5 h-5 text-accent" />
-                  <h3 className="font-semibold text-primary">Villes de départ</h3>
+            <div className="grid md:grid-cols-2 gap-4 md:gap-6">
+              <div className="bg-white rounded-xl shadow-card p-5 border border-accent/20">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-11 h-11 rounded-xl bg-accent/10 flex items-center justify-center flex-shrink-0">
+                    <Bus className="w-6 h-6 text-accent" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-primary text-lg">Villes de départ</h3>
+                    {enrichment?.departures && enrichment.departures.length > 0 && (
+                      <p className="text-xs text-primary-500 font-medium mt-0.5">
+                        {enrichment.departures.length} villes disponibles
+                      </p>
+                    )}
+                  </div>
                 </div>
+
                 {enrichment?.departures && enrichment.departures.length > 0 ? (
-                  <div className="space-y-2">
-                    <p className="text-sm text-primary-600">
-                      <span className="font-medium">{enrichment.departures.length} villes de départ</span> disponibles
-                    </p>
+                  <div className="space-y-3">
+                    {/* Aperçu des 3 premières villes (tri standard) */}
+                    <div className="flex flex-wrap gap-1.5">
+                      {enrichment.departures
+                        .slice()
+                        .sort((a, b) => {
+                          if (a.city === 'Sans transport') return -1;
+                          if (b.city === 'Sans transport') return 1;
+                          const aIndex = STANDARD_CITIES.findIndex(std => a.city.toLowerCase().includes(std.toLowerCase()));
+                          const bIndex = STANDARD_CITIES.findIndex(std => b.city.toLowerCase().includes(std.toLowerCase()));
+                          if (aIndex >= 0 && bIndex >= 0) return aIndex - bIndex;
+                          if (aIndex >= 0) return -1;
+                          if (bIndex >= 0) return 1;
+                          return a.city.localeCompare(b.city);
+                        })
+                        .slice(0, 3)
+                        .map((dep, i) => (
+                          <span key={i} className="px-2.5 py-1 bg-accent/5 text-accent text-xs font-medium rounded-lg border border-accent/10">
+                            {dep.city === 'Sans transport' ? 'Sans transport' : dep.city}
+                          </span>
+                        ))}
+                      {enrichment.departures.length > 3 && (
+                        <span className="px-2.5 py-1 bg-primary-50 text-primary-500 text-xs font-medium rounded-lg">
+                          +{enrichment.departures.length - 3}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* CTA principal */}
                     <button
                       onClick={() => setShowDepartures(true)}
-                      className="text-xs text-accent hover:underline flex items-center gap-1"
+                      className="w-full py-2.5 bg-accent text-white rounded-xl font-semibold text-sm hover:bg-accent-600 transition-all flex items-center justify-center gap-2 shadow-sm btn-hover-lift active:scale-95"
                     >
-                      Voir la liste complète <ChevronRight className="w-3 h-3" />
+                      Voir toutes les villes
+                      <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
                     </button>
+
+                    {/* Prix min (Pro seulement) */}
                     {!isKids && (
-                      <p className="text-xs text-primary-500">
-                        À partir de <span className="font-semibold">0€</span> (Sans transport)
+                      <p className="text-xs text-center text-primary-500">
+                        Transport inclus • Supplément à partir de{' '}
+                        <span className="font-semibold">
+                          {Math.min(...enrichment.departures.filter(d => d.extra_eur > 0).map(d => d.extra_eur))}€
+                        </span>
                       </p>
                     )}
                   </div>
                 ) : (
-                  <p className="text-sm text-primary-600">
+                  <p className="text-sm text-primary-600 italic">
                     {stay?.departureCity || 'Départ : à confirmer'}
                   </p>
                 )}
               </div>
               <div className="bg-white rounded-xl shadow-card p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <GraduationCap className="w-5 h-5 text-accent" />
-                  <h3 className="font-semibold text-primary">
-                    {isKids ? "Un encadrement en plus" : "Option d'accompagnement (G&D)"}
-                  </h3>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <GraduationCap className="w-5 h-5 text-accent" />
+                    <h3 className="font-semibold text-primary">
+                      {isKids ? "Un accompagnement pour toi" : "Encadrement individualisé"}
+                    </h3>
+                  </div>
+                  {/* Pastille 1+1 sobre */}
+                  <span className="flex items-center gap-1 px-2.5 py-1 bg-accent/10 text-accent text-xs font-semibold rounded-lg border border-accent/20">
+                    <Users className="w-3 h-3" />
+                    1+1
+                  </span>
                 </div>
                 {isKids ? (
                   <div className="text-sm text-primary-600 space-y-2">
@@ -345,37 +431,31 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
                       Si tu en as besoin, on peut te proposer un accompagnement renforcé pour que le séjour se passe au mieux.
                     </p>
                     <p className="text-primary-500">
-                      Un adulte référent et ta structure valident avec nous ce qui est le mieux pour toi.
+                      Un animateur référent peut t'accompagner tout au long du séjour. Ton adulte référent et ta structure valident avec nous ce qui est le mieux pour toi.
                     </p>
                   </div>
                 ) : (
                   <div className="text-sm text-primary-600 space-y-3">
-                    <p>
-                      Groupe & Découverte peut proposer un accompagnement renforcé selon le profil du jeune (validation avec la structure).
+                    <p className="font-medium text-primary">
+                      Partir avec Groupe & Découverte, c'est la garantie de bénéficier d'un accompagnement individualisé.
                     </p>
-
-                    <div className="bg-primary-50 rounded-lg p-3 border border-primary-100">
-                      <p className="font-medium text-primary mb-2">Surcoût encadrement (selon niveau) :</p>
-                      <div className="flex gap-3">
-                        <span className="px-2 py-1 bg-white rounded border text-primary-700">0 €</span>
-                        <span className="px-2 py-1 bg-white rounded border text-primary-700">+49 €</span>
-                        <span className="px-2 py-1 bg-white rounded border text-primary-700">+70 €</span>
-                      </div>
-                      <p className="text-xs text-primary-500 mt-2 italic">
-                        Le surcoût exact est confirmé au moment de la réservation (côté travailleurs sociaux).
-                      </p>
-                    </div>
-
-                    {stay?.educationalOption && (
-                      <details>
-                        <summary className="cursor-pointer text-accent font-medium">
-                          Détails de l'accompagnement possible
-                        </summary>
-                        <p className="mt-2 text-primary-600">
-                          {stay.educationalOption}
-                        </p>
-                      </details>
-                    )}
+                    <ul className="space-y-2">
+                      <li className="flex items-start gap-2">
+                        <span className="text-accent mt-0.5">•</span>
+                        <span>Un accompagnement personnalisé sur la recherche du séjour de vacances</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-accent mt-0.5">•</span>
+                        <span>La connaissance du projet associatif de notre partenaire</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-accent mt-0.5">•</span>
+                        <span>Un suivi adapté sur toute la durée du séjour</span>
+                      </li>
+                    </ul>
+                    <p className="text-primary-700 font-medium border-t border-primary-100 pt-3 mt-3">
+                      Selon la situation, un animateur référent peut être mis à disposition tout au long du séjour.
+                    </p>
                   </div>
                 )}
               </div>
@@ -416,7 +496,7 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
               {isKids ? (
                 <button
                   onClick={handleKidsCTA}
-                  className="w-full py-3 bg-accent text-white rounded-lg font-medium hover:bg-accent-600 transition-colors"
+                  className="w-full py-3 bg-accent text-white rounded-xl font-semibold hover:bg-accent-600 transition-all btn-hover-lift shadow-sm active:scale-95"
                 >
                   Ce séjour m&apos;intéresse
                 </button>
@@ -424,7 +504,7 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
                 <button
                   onClick={() => setShowBooking(true)}
                   disabled={sessions.filter(s => (s?.seatsLeft ?? 0) > 0).length === 0}
-                  className="w-full py-3 bg-accent text-white rounded-lg font-medium hover:bg-accent-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full py-3 bg-accent text-white rounded-xl font-semibold hover:bg-accent-600 transition-all btn-hover-lift shadow-sm active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
                 >
                   Réserver ce séjour
                 </button>
@@ -435,7 +515,12 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
       </div>
 
       {showBooking && (
-        <BookingModal stay={stay} sessions={sessions} onClose={() => setShowBooking(false)} />
+        <BookingModal
+          stay={stay}
+          sessions={sessions}
+          departureCities={enrichment?.departures}
+          onClose={() => setShowBooking(false)}
+        />
       )}
 
       {showWishlistModal && (
@@ -451,28 +536,46 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
       {/* Modal villes de départ */}
       {showDepartures && enrichment?.departures && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setShowDepartures(false)}>
-          <div className="bg-white rounded-xl max-w-md w-full max-h-[80vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
-            <div className="sticky top-0 bg-white border-b border-primary-100 p-4 flex items-center justify-between">
-              <h2 className="font-semibold text-primary text-lg">Villes de départ</h2>
-              <button onClick={() => setShowDepartures(false)} className="p-1 hover:bg-primary-50 rounded">
-                <X className="w-5 h-5" />
+          <div className="bg-white rounded-2xl max-w-md w-full max-h-[80vh] overflow-hidden shadow-2xl" onClick={e => e.stopPropagation()}>
+            <div className="sticky top-0 bg-white border-b border-primary-100 p-6 pb-4 flex items-center justify-between">
+              <div>
+                <h2 className="font-bold text-primary text-xl">Villes de départ</h2>
+                <p className="text-sm text-primary-500 mt-1">
+                  {isPro
+                    ? `${enrichment.departures.length} villes • Tarifs incluant le transport`
+                    : `${enrichment.departures.length} villes disponibles`
+                  }
+                </p>
+              </div>
+              <button onClick={() => setShowDepartures(false)} className="p-2 hover:bg-primary-50 rounded-xl transition-colors">
+                <X className="w-5 h-5 text-primary" />
               </button>
             </div>
-            <div className="p-4 space-y-2">
+            <div className="p-4 space-y-1 max-h-[50vh] overflow-y-auto">
               {isKids && (
-                <p className="text-xs text-primary-500 italic mb-3">
+                <p className="text-xs text-primary-500 italic mb-3 px-2">
                   Choix confirmé lors de l&apos;inscription
                 </p>
               )}
               {enrichment.departures
                 .slice()
-                .sort((a, b) => a.city.localeCompare(b.city))
+                .sort((a, b) => {
+                  // Mettre "Sans transport" en premier, puis trier selon STANDARD_CITIES
+                  if (a.city === 'Sans transport') return -1;
+                  if (b.city === 'Sans transport') return 1;
+                  const aIndex = STANDARD_CITIES.findIndex(std => a.city.toLowerCase().includes(std.toLowerCase()));
+                  const bIndex = STANDARD_CITIES.findIndex(std => b.city.toLowerCase().includes(std.toLowerCase()));
+                  if (aIndex >= 0 && bIndex >= 0) return aIndex - bIndex;
+                  if (aIndex >= 0) return -1;
+                  if (bIndex >= 0) return 1;
+                  return a.city.localeCompare(b.city);
+                })
                 .map((dep, i) => (
-                  <div key={i} className={`flex items-center justify-between p-3 border border-primary-100 rounded-lg`}>
-                    <span className="text-sm text-primary capitalize">{dep.city}</span>
+                  <div key={i} className="flex items-center justify-between py-3 px-4 rounded-xl hover:bg-primary-50 transition-colors cursor-default">
+                    <span className="text-sm font-medium text-primary-700 capitalize">{dep.city}</span>
                     {!isKids && (
-                      <span className="text-sm font-medium text-accent">
-                        {dep.extra_eur === 0 ? 'Sans transport' : `+${dep.extra_eur}€`}
+                      <span className="text-sm font-semibold text-accent">
+                        {dep.extra_eur === 0 ? 'Inclus' : `+${dep.extra_eur}€`}
                       </span>
                     )}
                   </div>

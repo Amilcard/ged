@@ -157,7 +157,7 @@ export function WishlistModal({ isOpen, onClose, stayTitle, staySlug, stayUrl }:
           <button
             onClick={handleSaveMotivation}
             disabled={!prenom.trim()}
-            className="w-full mb-4 py-3 bg-primary text-white rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-primary-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full mb-4 py-3 bg-accent text-white rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-accent-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {saved ? (
               <><Check className="w-4 h-4" /> Enregistré !</>
