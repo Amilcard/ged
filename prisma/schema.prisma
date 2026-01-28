@@ -1,17 +1,11 @@
 generator client {
-    provider = "prisma-client-js"
-    binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
 }
 
 datasource db {
-    provider = "sqlite"
-    url      = env("DATABASE_URL")
-}
-
-enum Role {
-  ADMIN
-  EDITOR
-  VIEWER
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -26,39 +20,42 @@ model User {
 }
 
 model Stay {
-  id               String        @id @default(cuid())
-  slug             String        @unique
-  title            String
-  descriptionShort String        @map("description_short")
-  programme        Json
-  geography        String
-  accommodation    String
-  supervision      String
-  priceFrom        Int           @map("price_from")
-  durationDays     Int           @map("duration_days")
-  period           String
-  ageMin           Int           @map("age_min")
-  ageMax           Int           @map("age_max")
-  themes           Json
-  imageCover       String        @map("image_cover")
-  published        Boolean       @default(false)
-  createdAt        DateTime      @default(now()) @map("created_at")
-  updatedAt        DateTime      @updatedAt @map("updated_at")
-
-  // Existing ingestion fields
-  departureCity       String?   @map("departure_city")
-  educationalOption   String?   @map("educational_option")
-  sourceUrl           String?   @map("source_url")
-  sourcePdfPath       String?   @map("source_pdf_path")
-  importedAt          DateTime? @map("imported_at")
-  lastSyncAt          DateTime? @map("last_sync_at")
-  sourceManual        Boolean   @default(false) @map("source_manual")
-
-  // UFOVAL A+ fields
-  contentKids         Json?
-
-  sessions         StaySession[]
-  bookings         Booking[]
+  id                 String        @id @default(cuid())
+  slug               String        @unique
+  title              String
+  descriptionShort   String        @map("description_short")
+  programme          Json
+  geography          String
+  accommodation      String
+  supervision        String
+  priceFrom          Int           @map("price_from")
+  durationDays       Int           @map("duration_days")
+  period             String
+  ageMin             Int           @map("age_min")
+  ageMax             Int           @map("age_max")
+  themes             Json
+  imageCover         String        @map("image_cover")
+  published          Boolean       @default(false)
+  createdAt          DateTime      @default(now()) @map("created_at")
+  updatedAt          DateTime      @updatedAt @map("updated_at")
+  departureCity      String?       @map("departure_city")
+  educationalOption  String?       @map("educational_option")
+  sourceUrl          String?       @map("source_url")
+  sourcePdfPath      String?       @map("source_pdf_path")
+  importedAt         DateTime?     @map("imported_at")
+  lastSyncAt         DateTime?     @map("last_sync_at")
+  sourceManual       Boolean       @default(false) @map("source_manual")
+  contentKids        Json?
+  accommodationFacts Json?         @map("accommodation_facts")
+  accommodationLabel String?       @map("accommodation_label")
+  accommodationType  String?       @map("accommodation_type")
+  factsSyncedAt      DateTime?     @map("facts_synced_at")
+  geoLabel           String?       @map("geo_label")
+  geoPrecision       String?       @map("geo_precision")
+  meetingPoint       String?       @map("meeting_point")
+  sourceFacts        Json?         @map("source_facts")
+  bookings           Booking[]
+  sessions           StaySession[]
 
   @@index([slug])
   @@index([published])
@@ -76,30 +73,36 @@ model StaySession {
   seatsTotal Int       @map("seats_total")
   seatsLeft  Int       @map("seats_left")
   createdAt  DateTime  @default(now()) @map("created_at")
-  stay       Stay      @relation(fields: [stayId], references: [id], onDelete: Cascade)
   bookings   Booking[]
+  stay       Stay      @relation(fields: [stayId], references: [id], onDelete: Cascade)
 
   @@unique([stayId, startDate, endDate])
   @@map("stay_sessions")
 }
 
 model Booking {
-  id              String      @id @default(cuid())
-  stayId          String      @map("stay_id")
-  sessionId       String      @map("session_id")
-  organisation    String
-  socialWorkerName String     @map("social_worker_name")
-  email           String
-  phone           String
-  childFirstName  String      @map("child_first_name")
-  childLastName   String      @map("child_last_name")
-  childBirthDate  DateTime    @map("child_birth_date")
-  notes           String?
-  childNotes      String?     @map("child_notes")
-  status          String      @default("new")
-  createdAt       DateTime    @default(now()) @map("created_at")
-  stay            Stay        @relation(fields: [stayId], references: [id])
-  session         StaySession @relation(fields: [sessionId], references: [id])
+  id               String      @id @default(cuid())
+  stayId           String      @map("stay_id")
+  sessionId        String      @map("session_id")
+  organisation     String
+  socialWorkerName String      @map("social_worker_name")
+  email            String
+  phone            String
+  childFirstName   String      @map("child_first_name")
+  childLastName    String      @map("child_last_name")
+  childBirthDate   DateTime    @map("child_birth_date")
+  notes            String?
+  childNotes       String?     @map("child_notes")
+  status           String      @default("new")
+  createdAt        DateTime    @default(now()) @map("created_at")
+  session          StaySession @relation(fields: [sessionId], references: [id])
+  stay             Stay        @relation(fields: [stayId], references: [id])
 
   @@map("bookings")
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+  VIEWER
 }
