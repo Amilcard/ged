@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { X, Check, ChevronRight, ChevronLeft, Loader2, Shield, Star } from 'lucide-react';
 import type { Stay, StaySession } from '@/lib/types';
-import { formatDate, formatDateLong } from '@/lib/utils';
+import { formatDate, formatDateLong, validateChildAge } from '@/lib/utils';
 
 interface DepartureCity {
   city: string;
@@ -29,7 +29,7 @@ interface Step1Data {
 
 interface Step2Data {
   childFirstName: string;
-  childBirthYear: string;
+  childBirthDate: string; // Format YYYY-MM-DD (input type="date")
   consent: boolean;
 }
 
@@ -71,7 +71,7 @@ export function BookingModal({ stay, sessions, departureCities = [], sessionBase
 
   const [step2, setStep2] = useState<Step2Data>({
     childFirstName: '',
-    childBirthYear: '',
+    childBirthDate: '',
     consent: false,
   });
 
@@ -83,6 +83,11 @@ export function BookingModal({ stay, sessions, departureCities = [], sessionBase
   });
   const selectedSession = sessions?.find(s => s?.id === selectedSessionId);
 
+  // Validation de l'âge au jour près (à la date de début de session)
+  const ageValidation = step2.childBirthDate && selectedSession
+    ? validateChildAge(step2.childBirthDate, selectedSession.startDate, stay.ageMin, stay.ageMax)
+    : { valid: false, age: null, message: null };
+
   // Filtrer les villes de départ : uniquement la liste standard + "Sans transport"
   const standardDepartureCities = departureCities.filter(dc =>
     STANDARD_CITIES.some(std =>
@@ -91,11 +96,8 @@ export function BookingModal({ stay, sessions, departureCities = [], sessionBase
   );
 
   const isStep1Valid = step1.organisation && step1.socialWorkerName && step1.email && step1.phone;
-  const isStep2Valid = step2.childFirstName && step2.childBirthYear && step2.consent;
-
-  // Générer les années de naissance possibles (6-17 ans)
-  const currentYear = new Date().getFullYear();
-  const birthYears = Array.from({ length: 12 }, (_, i) => currentYear - 6 - i);
+  // Step2 valide si: prénom rempli, date de naissance valide, âge OK, consentement
+  const isStep2Valid = step2.childFirstName && step2.childBirthDate && ageValidation.valid && step2.consent;
 
   const handleSubmit = async () => {
     if (!selectedSessionId) return;
@@ -103,8 +105,8 @@ export function BookingModal({ stay, sessions, departureCities = [], sessionBase
     setError('');
 
     try {
-      // Convertir année en date (1er janvier de l'année pour compatibilité DB)
-      const birthDate = `${step2.childBirthYear}-01-01`;
+      // Date de naissance au format YYYY-MM-DD (déjà fournie par input type="date")
+      const birthDate = step2.childBirthDate;
 
       const res = await fetch('/api/bookings', {
         method: 'POST',
@@ -243,6 +245,11 @@ export function BookingModal({ stay, sessions, departureCities = [], sessionBase
               <div className="bg-primary-50 rounded-lg p-3 text-xs text-primary-600">
                 <p><strong>1.</strong> Sélectionne la session qui correspond le mieux à tes disponibilités</p>
               </div>
+              {!selectedSessionId && (
+                <p className="text-sm text-amber-600 text-center">
+                  ⚠ Sélectionnez une session pour continuer
+                </p>
+              )}
               <button
                 onClick={() => setStep(1)}
                 disabled={!selectedSessionId}
@@ -319,7 +326,11 @@ export function BookingModal({ stay, sessions, departureCities = [], sessionBase
               <div className="bg-primary-50 rounded-lg p-3 text-xs text-primary-600">
                 <p><strong>2.</strong> Choisis ta ville de départ — le total se met à jour automatiquement</p>
               </div>
-
+              {!selectedCity && (
+                <p className="text-sm text-amber-600 text-center">
+                  ⚠ Sélectionnez une ville pour continuer
+                </p>
+              )}
               <div className="flex gap-3">
                 <button
                   onClick={() => setStep(0)}
@@ -404,17 +415,29 @@ export function BookingModal({ stay, sessions, departureCities = [], sessionBase
                   className="w-full px-4 py-3 border border-primary-200 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent"
                 />
                 <div>
-                  <label className="text-sm text-primary-600 mb-1 block">Année de naissance *</label>
-                  <select
-                    value={step2.childBirthYear}
-                    onChange={e => setStep2({ ...step2, childBirthYear: e.target.value })}
-                    className="w-full px-4 py-3 border border-primary-200 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent bg-white"
-                  >
-                    <option value="">Sélectionner l&apos;année</option>
-                    {birthYears.map(year => (
-                      <option key={year} value={year}>{year}</option>
-                    ))}
-                  </select>
+                  <label className="text-sm text-primary-600 mb-1 block">Date de naissance *</label>
+                  <input
+                    type="date"
+                    value={step2.childBirthDate}
+                    onChange={e => setStep2({ ...step2, childBirthDate: e.target.value })}
+                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent bg-white ${
+                      ageValidation.message ? 'border-red-300' : 'border-primary-200'
+                    }`}
+                    max={new Date().toISOString().split('T')[0]}
+                  />
+                  {!selectedSession && step2.childBirthDate && (
+                    <p className="mt-1 text-sm text-amber-600">
+                      ⚠ Veuillez d&apos;abord sélectionner une session pour valider l&apos;âge
+                    </p>
+                  )}
+                  {ageValidation.message && (
+                    <p className="mt-1 text-sm text-red-600">{ageValidation.message}</p>
+                  )}
+                  {ageValidation.valid && ageValidation.age !== null && (
+                    <p className="mt-1 text-sm text-green-600">
+                      ✓ L&apos;enfant aura {ageValidation.age} ans au départ ({stay.ageMin}–{stay.ageMax} ans requis)
+                    </p>
+                  )}
                 </div>
                 <label className="flex items-start gap-3 p-3 bg-primary-50 rounded-xl cursor-pointer">
                   <input
@@ -461,7 +484,7 @@ export function BookingModal({ stay, sessions, departureCities = [], sessionBase
                 <p className="text-sm"><strong>Séjour :</strong> {stay?.title}</p>
                 <p className="text-sm"><strong>Session :</strong> {formatDateLong(selectedSession?.startDate ?? '')}</p>
                 <p className="text-sm"><strong>Ville :</strong> {selectedCity}</p>
-                <p className="text-sm"><strong>Enfant :</strong> {step2.childFirstName}</p>
+                <p className="text-sm"><strong>Enfant :</strong> {step2.childFirstName} ({ageValidation.age} ans au départ)</p>
               </div>
 
               {/* Options éducatives */}
@@ -563,7 +586,7 @@ export function BookingModal({ stay, sessions, departureCities = [], sessionBase
                 <p><strong>Référence :</strong> {bookingId}</p>
                 <p><strong>Session :</strong> {formatDateLong(selectedSession?.startDate ?? '')} - {formatDateLong(selectedSession?.endDate ?? '')}</p>
                 <p><strong>Ville :</strong> {selectedCity}</p>
-                <p><strong>Enfant :</strong> {step2.childFirstName} (né en {step2.childBirthYear})</p>
+                <p><strong>Enfant :</strong> {step2.childFirstName} (né le {formatDate(step2.childBirthDate)})</p>
                 <p><strong>Contact :</strong> {step1.email}</p>
                 {selectedOption && (
                   <p><strong>Option :</strong> {selectedOption === 'ZEN' ? 'Option Tranquillité' : 'Option Ultime'}</p>
