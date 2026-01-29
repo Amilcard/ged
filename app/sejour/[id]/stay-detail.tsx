@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 import type { Stay, StaySession } from '@/lib/types';
 import { formatDateLong, getWishlistMotivation, addToWishlist } from '@/lib/utils';
-import { getPriceBreakdown } from '@/lib/pricing';
+import { getPriceBreakdown, findSessionPrice } from '@/lib/pricing';
 import { useApp } from '@/components/providers';
 import { BookingModal } from '@/components/booking-modal';
 import { WishlistModal } from '@/components/wishlist-modal';
@@ -108,8 +108,19 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
   const selectedCityData = enrichment?.departures?.find(d => d.city === preSelectedCity);
   const cityExtraEur = selectedCityData?.extra_eur ?? 0;
 
+  // Trouver le prix de la session sélectionnée (via matching date)
+  const sessions = stay?.sessions ?? [];
+  const selectedSession = preSelectedSessionId
+    ? sessions.find(s => s.id === preSelectedSessionId)
+    : null;
+
+  const selectedSessionPrice = selectedSession && enrichment?.sessions
+    ? findSessionPrice(selectedSession.startDate, selectedSession.endDate, enrichment.sessions)
+    : null;
+
   const priceBreakdown = getPriceBreakdown({
-    sessionPrice: minSessionPrice, // On utilise minSessionPrice car pas de prix par session individuelle
+    // Prix de la session sélectionnée, sinon null (on affiche juste "À partir de")
+    sessionPrice: selectedSessionPrice,
     cityExtraEur,
     optionType: null, // Options choisies dans le modal uniquement
     minSessionPrice,
@@ -155,7 +166,6 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
 
   const programme = Array.isArray(stay?.programme) ? stay.programme : [];
   const themes = Array.isArray(stay?.themes) ? stay.themes : [];
-  const sessions = stay?.sessions ?? [];
   const miniProgramme = programme.slice(0, 5);
 
   return (
@@ -254,19 +264,24 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
                     <div className="text-sm text-primary-500">
                       À partir de <span className="font-semibold">{priceBreakdown.minPrice} €</span>
                     </div>
-                    {/* Estimation dynamique (si sélection) */}
-                    {priceBreakdown.hasSelection && priceBreakdown.total !== null && cityExtraEur > 0 && (
+                    {/* Estimation dynamique (si session sélectionnée) */}
+                    {priceBreakdown.total !== null && (
                       <div className="bg-accent/5 border border-accent/20 rounded-lg px-3 py-2">
                         <div className="text-xs text-primary-600 mb-0.5">Votre estimation</div>
                         <div className="text-lg font-bold text-accent">{priceBreakdown.total} €</div>
-                        <div className="text-xs text-primary-500">
-                          ({priceBreakdown.baseSession}€ + {cityExtraEur}€ transport)
+                        <div className="text-xs text-primary-500 space-y-0.5">
+                          {priceBreakdown.baseSession !== null && (
+                            <div>Session : {priceBreakdown.baseSession}€</div>
+                          )}
+                          {cityExtraEur > 0 && (
+                            <div>Transport : +{cityExtraEur}€</div>
+                          )}
                         </div>
                       </div>
                     )}
                     {!priceBreakdown.hasSelection && (
                       <div className="text-xs text-primary-400">
-                        Sans transport inclus
+                        Sélectionnez une session
                       </div>
                     )}
                   </div>
@@ -607,7 +622,7 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
           stay={stay}
           sessions={sessions}
           departureCities={enrichment?.departures}
-          sessionBasePrice={minSessionPrice}
+          enrichmentSessions={enrichment?.sessions}
           initialSessionId={preSelectedSessionId}
           initialCity={preSelectedCity}
           onClose={() => setShowBooking(false)}

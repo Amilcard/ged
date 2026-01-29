@@ -277,3 +277,63 @@ export function formatPriceBreakdown(breakdown: PriceBreakdown): {
 
   return { minPriceText, estimationText, detailLines };
 }
+
+// ============================================================
+// MATCHING: Lier session BDD (id+dates) → enrichment (prix)
+// Format enrichment.date_text: "04/07 - 17/07" (JJ/MM - JJ/MM)
+// Format stay.sessions.startDate: ISO DateTime "2026-07-04T..."
+// ============================================================
+
+export interface EnrichmentSessionData {
+  date_text: string;
+  base_price_eur: number | null;
+  promo_price_eur: number | null;
+}
+
+/**
+ * Convertit une date ISO en format JJ/MM
+ * @example "2026-07-04T00:00:00.000Z" → "04/07"
+ */
+function isoToDDMM(isoDate: string): string {
+  const d = new Date(isoDate);
+  if (isNaN(d.getTime())) return '';
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  return `${day}/${month}`;
+}
+
+/**
+ * Trouve le prix d'une session en matchant par dates
+ *
+ * @param startDate - Date ISO de début de session (stay.sessions[].startDate)
+ * @param endDate - Date ISO de fin de session (stay.sessions[].endDate)
+ * @param enrichmentSessions - Sessions enrichies avec prix (enrichment.sessions)
+ * @returns Prix promo ou base, ou null si non trouvé
+ *
+ * @example
+ * const price = findSessionPrice(
+ *   "2026-07-04T00:00:00.000Z",
+ *   "2026-07-17T00:00:00.000Z",
+ *   enrichment.sessions
+ * ); // → 1007 (promo_price_eur)
+ */
+export function findSessionPrice(
+  startDate: string,
+  endDate: string,
+  enrichmentSessions: EnrichmentSessionData[]
+): number | null {
+  if (!startDate || !endDate || !enrichmentSessions?.length) return null;
+
+  const startDDMM = isoToDDMM(startDate);
+  const endDDMM = isoToDDMM(endDate);
+  if (!startDDMM || !endDDMM) return null;
+
+  // Format attendu dans enrichment: "04/07 - 17/07"
+  const targetDateText = `${startDDMM} - ${endDDMM}`;
+
+  const match = enrichmentSessions.find(s => s.date_text === targetDateText);
+  if (!match) return null;
+
+  // Priorité au prix promo, sinon prix de base
+  return match.promo_price_eur ?? match.base_price_eur ?? null;
+}
