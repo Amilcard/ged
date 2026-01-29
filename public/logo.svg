@@ -1,0 +1,14 @@
+<svg width="200" height="40" viewBox="0 0 200 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .logo-text { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-style: italic; }
+      .logo-et { font-family: 'Inter', system-ui, sans-serif; font-weight: 400; font-style: italic; }
+    </style>
+  </defs>
+  <!-- GROUPE -->
+  <text x="0" y="18" class="logo-text" fill="#F59E0B" font-size="16">GROUPE</text>
+  <!-- ET -->
+  <text x="68" y="18" class="logo-et" fill="#1F3B57" font-size="14">ET</text>
+  <!-- DÉCOUVERTE -->
+  <text x="0" y="36" class="logo-text" fill="#F59E0B" font-size="16">DÉCOUVERTE</text>
+</svg>
