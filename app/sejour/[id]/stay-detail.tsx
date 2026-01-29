@@ -307,7 +307,14 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
               <h2 className="text-2xl md:text-3xl font-bold text-primary mb-4">
                 {isKids ? 'C\'est quoi ce séjour ?' : 'Présentation'}
               </h2>
-              <p className="text-primary-600 leading-relaxed">{stay?.descriptionShort ?? ''}</p>
+              {/* Mode Kids: description longue depuis contentKids, fallback sur descriptionShort */}
+              {isKids ? (
+                <p className="text-primary-600 leading-relaxed whitespace-pre-line">
+                  {contentKidsParsed?.description || contentKidsParsed?.short_description || stay?.descriptionShort || ''}
+                </p>
+              ) : (
+                <p className="text-primary-600 leading-relaxed">{stay?.descriptionShort ?? ''}</p>
+              )}
               <div className="flex flex-wrap gap-2 mt-4">
                 {themes.map(theme => (
                   <span key={theme} className="flex items-center gap-1 px-3 py-1.5 bg-primary-50 text-primary-600 rounded-full text-sm font-medium border border-primary-100">
@@ -317,40 +324,44 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
               </div>
             </section>
 
-            {/* Mini Programme */}
-            <section className="bg-white rounded-xl shadow-card p-6 md:p-8">
-              <h2 className="text-2xl md:text-3xl font-bold text-primary mb-4">
-                {isKids ? 'Au programme' : 'Programme en bref'}
-              </h2>
-              <ul className="space-y-3">
-                {miniProgramme.map((item, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <ChevronRight className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
-                    <span className="text-primary-600">{item}</span>
-                  </li>
-                ))}
-              </ul>
-              {programme.length > miniProgramme.length && (
-                <p className="text-sm text-primary-400 mt-3">+ {programme.length - miniProgramme.length} activités supplémentaires</p>
-              )}
-            </section>
+            {/* Mini Programme - Masqué si vide */}
+            {miniProgramme.length > 0 && (
+              <section className="bg-white rounded-xl shadow-card p-6 md:p-8">
+                <h2 className="text-2xl md:text-3xl font-bold text-primary mb-4">
+                  {isKids ? 'Au programme' : 'Programme en bref'}
+                </h2>
+                <ul className="space-y-3">
+                  {miniProgramme.map((item, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <ChevronRight className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
+                      <span className="text-primary-600">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                {programme.length > miniProgramme.length && (
+                  <p className="text-sm text-primary-400 mt-3">+ {programme.length - miniProgramme.length} activités supplémentaires</p>
+                )}
+              </section>
+            )}
 
-            {/* Full Programme */}
-            <section className="bg-white rounded-xl shadow-card p-6 md:p-8">
-              <h2 className="text-2xl md:text-3xl font-bold text-primary mb-4">
-                {isKids ? 'Tout le programme' : 'Programme détaillé'}
-              </h2>
-              <ol className="space-y-4">
-                {programme.map((item, i) => (
-                  <li key={i} className="flex items-start gap-4 pb-4 border-b border-primary-100 last:border-0">
-                    <span className="w-7 h-7 bg-accent/10 text-accent text-sm font-bold rounded-full flex items-center justify-center flex-shrink-0">
-                      {i + 1}
-                    </span>
-                    <span className="text-primary-600">{item}</span>
-                  </li>
-                ))}
-              </ol>
-            </section>
+            {/* Full Programme - Masqué si vide */}
+            {programme.length > 0 && (
+              <section className="bg-white rounded-xl shadow-card p-6 md:p-8">
+                <h2 className="text-2xl md:text-3xl font-bold text-primary mb-4">
+                  {isKids ? 'Tout le programme' : 'Programme détaillé'}
+                </h2>
+                <ol className="space-y-4">
+                  {programme.map((item, i) => (
+                    <li key={i} className="flex items-start gap-4 pb-4 border-b border-primary-100 last:border-0">
+                      <span className="w-7 h-7 bg-accent/10 text-accent text-sm font-bold rounded-full flex items-center justify-center flex-shrink-0">
+                        {i + 1}
+                      </span>
+                      <span className="text-primary-600">{item}</span>
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            )}
 
             {/* 3 Columns - Lieu/Hébergement/Encadrement */}
             <div className="grid md:grid-cols-3 gap-4 md:gap-6">
