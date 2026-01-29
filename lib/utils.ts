@@ -195,3 +195,79 @@ export function resetAllStorage(): void {
   localStorage.removeItem(STORAGE_KEYS.AUTH);
   localStorage.removeItem(STORAGE_KEYS.PERIOD);
 }
+
+// ============================================================
+// VALIDATION ÂGE: Calcul exact à la date de session
+// ============================================================
+
+/**
+ * Calcule l'âge exact en années à une date donnée
+ * @param birthDate - Date de naissance (format ISO ou YYYY-MM-DD)
+ * @param targetDate - Date à laquelle calculer l'âge (ex: début de session)
+ * @returns Âge en années (entier) ou null si dates invalides
+ */
+export function calculateAgeAtDate(birthDate: string, targetDate: string): number | null {
+  const birth = dayjs(birthDate);
+  const target = dayjs(targetDate);
+
+  if (!birth.isValid() || !target.isValid()) return null;
+
+  let age = target.year() - birth.year();
+
+  // Ajuster si l'anniversaire n'est pas encore passé à la date cible
+  const birthdayThisYear = birth.year(target.year());
+  if (target.isBefore(birthdayThisYear)) {
+    age -= 1;
+  }
+
+  return age;
+}
+
+export interface AgeValidationResult {
+  valid: boolean;
+  age: number | null;
+  message: string | null;
+}
+
+/**
+ * Valide si l'âge de l'enfant est dans les limites du séjour
+ * @param birthDate - Date de naissance (format YYYY-MM-DD)
+ * @param sessionStartDate - Date de début de session (format ISO)
+ * @param ageMin - Âge minimum requis
+ * @param ageMax - Âge maximum autorisé
+ * @returns Résultat de validation avec message
+ */
+export function validateChildAge(
+  birthDate: string,
+  sessionStartDate: string,
+  ageMin: number,
+  ageMax: number
+): AgeValidationResult {
+  if (!birthDate || !sessionStartDate) {
+    return { valid: false, age: null, message: null };
+  }
+
+  const age = calculateAgeAtDate(birthDate, sessionStartDate);
+
+  if (age === null) {
+    return { valid: false, age: null, message: 'Date de naissance invalide' };
+  }
+
+  if (age < ageMin) {
+    return {
+      valid: false,
+      age,
+      message: `À la date du départ, l'enfant aura ${age} ans. Ce séjour est prévu pour les ${ageMin}–${ageMax} ans.`
+    };
+  }
+
+  if (age > ageMax) {
+    return {
+      valid: false,
+      age,
+      message: `À la date du départ, l'enfant aura ${age} ans. Ce séjour est prévu pour les ${ageMin}–${ageMax} ans.`
+    };
+  }
+
+  return { valid: true, age, message: null };
+}
