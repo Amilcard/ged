@@ -22,7 +22,6 @@ import {
 } from 'lucide-react';
 import type { Stay, StaySession } from '@/lib/types';
 import { formatDateLong, getWishlistMotivation, addToWishlist } from '@/lib/utils';
-import { getPriceBreakdown } from '@/lib/pricing';
 import { useApp } from '@/components/providers';
 import { BookingModal } from '@/components/booking-modal';
 import { WishlistModal } from '@/components/wishlist-modal';
@@ -103,17 +102,6 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
     if (prices.length === 0) return null;
     return Math.min(...prices);
   })();
-
-  // Calcul du breakdown de prix dynamique (session + ville sélectionnées)
-  const selectedCityData = enrichment?.departures?.find(d => d.city === preSelectedCity);
-  const cityExtraEur = selectedCityData?.extra_eur ?? 0;
-
-  const priceBreakdown = getPriceBreakdown({
-    sessionPrice: minSessionPrice, // On utilise minSessionPrice car pas de prix par session individuelle
-    cityExtraEur,
-    optionType: null, // Options choisies dans le modal uniquement
-    minSessionPrice,
-  });
 
   const handleToggleWishlist = () => {
     if (slug) toggleWishlist(slug);
@@ -248,27 +236,14 @@ export function StayDetail({ stay }: { stay: Stay & { sessions: StaySession[], p
             {/* Prix / note tarif (Pro) */}
             {mounted && !isKids && (
               <div className="text-right">
-                {priceBreakdown.minPrice !== null ? (
-                  <div className="space-y-1">
-                    {/* Prix minimum "À partir de" */}
-                    <div className="text-sm text-primary-500">
-                      À partir de <span className="font-semibold">{priceBreakdown.minPrice} €</span>
+                {minSessionPrice !== null ? (
+                  <div>
+                    <div className="text-base font-bold text-accent">
+                      À partir de {minSessionPrice} €
                     </div>
-                    {/* Estimation dynamique (si sélection) */}
-                    {priceBreakdown.hasSelection && priceBreakdown.total !== null && cityExtraEur > 0 && (
-                      <div className="bg-accent/5 border border-accent/20 rounded-lg px-3 py-2">
-                        <div className="text-xs text-primary-600 mb-0.5">Votre estimation</div>
-                        <div className="text-lg font-bold text-accent">{priceBreakdown.total} €</div>
-                        <div className="text-xs text-primary-500">
-                          ({priceBreakdown.baseSession}€ + {cityExtraEur}€ transport)
-                        </div>
-                      </div>
-                    )}
-                    {!priceBreakdown.hasSelection && (
-                      <div className="text-xs text-primary-400">
-                        Sans transport inclus
-                      </div>
-                    )}
+                    <div className="text-xs text-primary-500">
+                      Sans transport (0€)
+                    </div>
                   </div>
                 ) : stay?.price_base == null ? (
                   <div className="text-sm text-primary-500 italic">

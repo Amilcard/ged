@@ -31,4 +31,3 @@ scripts/ufoval/merge-departures-and-sessions.js
 # Local AI/work files
 .ai-workspace/
 .tmp-check.ts
-.claude/settings.local.json
