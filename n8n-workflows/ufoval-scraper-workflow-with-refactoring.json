@@ -1,0 +1,262 @@
+{
+  "name": "UFOVAL Scraper - Pipeline Complet AVEC Reformulation",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{"field": "hours", "hoursInterval": 24}]
+        }
+      },
+      "id": "001-scheduler",
+      "name": "Tous les jours à 2h du matin",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [240, 300],
+      "webhookId": ""
+    },
+    {
+      "parameters": {
+        "url": "https://ufoval.fol74.org/",
+        "options": {
+          "redirect": {"redirect": {"followRedirects": true}},
+          "headers": {
+            "User-Agent": "GED-Bot/1.0 (+https://groupe-et-decouverte.fr)",
+            "Accept-Language": "fr-FR,fr;q=0.9"
+          }
+        }
+      },
+      "id": "002-homepage",
+      "name": "Fetch Homepage UFOVAL",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Extraire tous les liens vers les catégories de séjours\nconst $ = cheerio.load($input.item.json.data);\n\nconst categories = [];\n$('a[href*=\"sejours-colonies-de-vacances\"]').each((i, el) => {\n  const $el = $(el);\n  const href = $el.attr('href');\n  const text = $el.text().trim();\n  \n  if (href && href.match(/^\\/sejours-colonies-de-vacances/) && \n      !href.includes('/sejours-colonies-de-vacances-a-la-mer/') &&\n      !href.includes('/sejours-')) {\n    categories.push({\n      url: href.startsWith('http') ? href : `https://ufoval.fol74.org${href}`,\n      name: text || href.split('/').pop(),\n      type: 'category'\n    });\n  }\n});\n\nconst uniqueCategories = [];\nconst seen = new Set();\nfor (const cat of categories) {\n  if (!seen.has(cat.url)) {\n    seen.add(cat.url);\n    uniqueCategories.push(cat);\n  }\n}\n\nreturn uniqueCategories.map(cat => ({ json: cat }));"
+      },
+      "id": "003-extract-categories",
+      "name": "Extraire Catégories",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {
+          "redirect": {"redirect": {"followRedirects": true}},
+          "headers": {
+            "User-Agent": "GED-Bot/1.0",
+            "Accept-Language": "fr-FR,fr;q=0.9"
+          }
+        }
+      },
+      "id": "004-fetch-category",
+      "name": "Fetch Page Catégorie",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const $ = cheerio.load($input.item.json.data);\nconst stays = [];\n\n$('a[href*=\"/sejours-colonies-de-vacances/\"]').each((i, el) => {\n  const $el = $(el);\n  const href = $el.attr('href');\n  \n  if (href && href.match(/\\/sejours-colonies-de-vacances\\/[a-z0-9-]+$/) && \n      !href.match(/\\/sejours-colonies-de-vacances-(a-la|a-l'|en)\\s/)) {\n    const title = $el.find('h3, h4, .stay-title').first().text().trim() || $el.attr('title') || '';\n    stays.push({\n      url: href.startsWith('http') ? href : `https://ufoval.fol74.org${href}`,\n      title: title,\n      category: $input.item.json.name,\n      category_url: $input.item.json.url\n    });\n  }\n});\n\nconst uniqueStays = [];\nconst seen = new Set();\nfor (const stay of stays) {\n  if (!seen.has(stay.url)) {\n    seen.add(stay.url);\n    uniqueStays.push(stay);\n  }\n}\n\nreturn uniqueStays.map(stay => ({ json: stay }));"
+      },
+      "id": "005-extract-stay-links",
+      "name": "Extraire Liens Séjours",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {
+          "redirect": {"redirect": {"followRedirects": true}},
+          "headers": {
+            "User-Agent": "GED-Bot/1.0",
+            "Accept-Language": "fr-FR,fr;q=0.9"
+          }
+        }
+      },
+      "id": "006-fetch-stay",
+      "name": "Fetch Page Détail Séjour",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1340, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================\n// PARSER COMPLET UFOVAL - Sessions + Départs + Prix\n// ============================================\n\nconst $ = cheerio.load($input.item.json.data);\nconst html = $input.item.json.data;\n\nconst title = $('h1, .stay-title').first().text().trim() || $('title').text().trim();\nconst description = $('meta[name=\"description\"]').attr('content') || $('p').first().text().trim().substring(0, 500);\n\nconst sessions = [];\n$('table').each((i, table) => {\n  const $table = $(table);\n  const headers = $table.find('thead th').map((_, th) => $(th).text().trim()).get();\n  const hasDate = headers.some(h => /date/i.test(h));\n  const hasTarif = headers.some(h => /tarif/i.test(h));\n  \n  if (!hasDate || !hasTarif) return;\n  \n  $table.find('tbody tr').each((j, row) => {\n    const $row = $(row);\n    const cells = $row.find('td').map((_, td) => $(td).text().trim()).get();\n    if (cells.length < 3) return;\n    \n    const dateText = cells[0];\n    const dateMatch = dateText.match(/(\\d{2})\\/(\\d{2})\\s*-\\s*(\\d{2})\\/(\\d{2})/);\n    const durationText = cells[1] || '';\n    const durationMatch = durationText.match(/(\\d+)\\s*jours?/i);\n    const priceText = cells.find(c => /€/.test(c)) || '';\n    const priceMatch = priceText.match(/(\\d[\\d\\s]*)\\s*€/);\n    \n    let promoPrice = null;\n    const $promoCell = $row.find('span.has-early-price, .promo-price');\n    if ($promoCell.length) {\n      const promoText = $promoCell.text();\n      const promoMatch = promoText.match(/(\\d[\\d\\s]*)\\s*€/);\n      if (promoMatch) promoPrice = parseInt(promoMatch[1].replace(/\\s/g, ''));\n    }\n    \n    if (dateMatch && durationMatch) {\n      const currentYear = new Date().getFullYear();\n      const startMonth = parseInt(dateMatch[2]);\n      const year = startMonth >= 7 ? currentYear : currentYear + 1;\n      \n      sessions.push({\n        start_date: `${year}-${dateMatch[2]}-${dateMatch[1]}`,\n        end_date: `${year}-${dateMatch[4]}-${dateMatch[3]}`,\n        start_date_text: dateText,\n        duration_days: parseInt(durationMatch[1]),\n        duration_text: durationText,\n        base_price_eur: priceMatch ? parseInt(priceMatch[1].replace(/\\s/g, '')) : null,\n        promo_price_eur: promoPrice,\n        has_promo: promoPrice !== null,\n        available: true\n      });\n    }\n  });\n});\n\nconst departures = [];\nconst $select = $('select#cart_step_availability_transport, select[name*=\"transport\"]');\nif ($select.length) {\n  $select.find('option').each((i, option) => {\n    const $option = $(option);\n    const text = $option.text().trim();\n    const value = $option.attr('value');\n    \n    if (text === 'Sans transport' || text === '' || !value) {\n      departures.push({ city: null, city_label: 'Sans transport', extra_eur: 0, transport_id: null });\n      return;\n    }\n    \n    const match = text.match(/^([a-zA-ZÀ-ÿ\\s\\-']+?)\\s*\\((\\d+)\\s*€\\)$/i);\n    if (match) {\n      departures.push({\n        city: match[1].trim().toLowerCase(),\n        city_label: match[1].trim(),\n        extra_eur: parseInt(match[2]),\n        transport_id: value\n      });\n    }\n  });\n}\n\nconst isFullyBooked = /aucune date n'est disponible|complet|inscriptions closes/i.test(html);\n\nconst targetSessions = sessions.filter(session => {\n  const startDate = new Date(session.start_date);\n  const startOfMonth = startDate.getMonth() + 1;\n  const startOfDay = startDate.getDate();\n  const afterJuly3 = (startOfMonth === 7 && startOfDay >= 3) || startOfMonth > 7;\n  const beforeAug30 = (startOfMonth === 8 && startOfDay <= 30) || startOfMonth < 8;\n  return afterJuly3 && beforeAug30 && !isFullyBooked;\n});\n\nreturn [{\n  json: {\n    source_url: $input.item.json.url,\n    title: title,\n    description: description.substring(0, 500),\n    category: $input.item.json.category,\n    all_sessions: sessions,\n    sessions_count: sessions.length,\n    filtered_sessions: targetSessions,\n    filtered_sessions_count: targetSessions.length,\n    departures: departures,\n    departures_count: departures.length,\n    is_fully_booked: isFullyBooked,\n    has_valid_sessions: targetSessions.length > 0,\n    scraped_at: new Date().toISOString(),\n    scrape_year: new Date().getFullYear()\n  }\n}];"
+      },
+      "id": "007-parse-stay-data",
+      "name": "Parser Sessions + Départs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1560, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================\n// REFORMULATION DES CONTENUS POUR TRAVAILLEURS SOCIAUX\n// ============================================\n\n// Fonction de reformulation du titre\nfunction refactorTitle(title) {\n  const cleaned = title.replace(/!/g, '').replace(/\\s+/g, ' ').trim();\n  if (!cleaned.toLowerCase().includes('séjour') && !cleaned.toLowerCase().includes('colo')) {\n    return `Séjour éducatif - ${cleaned}`;\n  }\n  return cleaned;\n}\n\n// Fonction de reformulation de la description\nfunction refactorDescription(description, category, sessions) {\n  const sentences = description.split(/[.!]/).filter(s => s.trim().length > 10);\n  \n  // Extraire les activités\n  const activities = [];\n  const activityKeywords = ['natation', 'vélo', 'vtt', 'randonnée', 'équitation', 'sport', 'jeux', 'atelier', 'sortie', 'visite', 'découverte', 'piscine', 'plage', 'montagne'];\n  \n  sentences.forEach(sentence => {\n    const lower = sentence.toLowerCase();\n    if (activityKeywords.some(keyword => lower.includes(keyword))) {\n      activities.push(sentence.trim());\n    }\n  });\n  \n  // Extraire les bienfaits éducatifs\n  const educationalBenefits = [];\n  const educationalKeywords = ['autonomie', 'confiance', 'socialisation', 'partage', 'équipe', 'apprendre', 'découvrir', 'respect', 'découverte', 'rencontre'];\n  \n  sentences.forEach(sentence => {\n    const lower = sentence.toLowerCase();\n    if (educationalKeywords.some(keyword => lower.includes(keyword))) {\n      educationalBenefits.push(sentence.trim());\n    }\n  });\n  \n  // Calculer la plage de prix\n  const prices = sessions.map(s => s.promo_price_eur || s.base_price_eur).filter(p => p);\n  const minPrice = prices.length > 0 ? Math.min(...prices) : null;\n  const maxDuration = sessions.length > 0 ? Math.max(...sessions.map(s => s.duration_days)) : null;\n  \n  // Générer la description reformulée\n  let refactored = `Ce séjour éducatif proposé par notre partenaire UFOVAL offre une expérience complète d'apprentissage et de découverte.`;\n  \n  if (activities.length > 0) {\n    refactored += `\\n\\n**Activités principales :**\\n${activities.slice(0, 3).map(a => `• ${a}`).join('\\n')}`;\n  }\n  \n  if (educationalBenefits.length > 0) {\n    refactored += `\\n\\n**Objectifs éducatifs :**\\n${educationalBenefits.slice(0, 3).map(b => `• ${b}`).join('\\n')}`;\n  }\n  \n  if (category) {\n    refactored += `\\n\\n**Destination :** ${category}`;\n  }\n  \n  if (minPrice) {\n    refactored += `\\n\\n**Tarif :** À partir de ${minPrice}€`;\n  }\n  \n  if (maxDuration) {\n    refactored += `\\n**Durée :** Jusqu'à ${maxDuration} jours`;\n  }\n  \n  refactored += `\\n\\n**Public cible :** Ce séjour s'adresse aux enfants et adolescents recherchant une expérience vacances enrichissante dans un cadre sécurisé et encadré par des professionnels.`;\n  \n  return refactored.trim();\n}\n\n// Formatter les sessions pour affichage\nfunction formatSessions(sessions) {\n  return sessions.map(session => {\n    const startDate = new Date(session.start_date).toLocaleDateString('fr-FR', {\n      day: 'numeric',\n      month: 'long',\n      year: 'numeric'\n    });\n    const endDate = new Date(session.end_date).toLocaleDateString('fr-FR', {\n      day: 'numeric',\n      month: 'long'\n    });\n    const price = session.promo_price_eur || session.base_price_eur;\n    const priceDisplay = session.promo_price_eur \n      ? `~${session.promo_price_eur}€~~ ~~${session.base_price_eur}~~` \n      : `${session.base_price_eur}€`;\n    \n    return `Du ${startDate} au ${endDate} (${session.duration_days} jours) - ${priceDisplay}`;\n  }).join('\\n');\n}\n\n// Formatter les villes de départ\nfunction formatDepartures(departures) {\n  const withTransport = departures.filter(d => d.city !== null);\n  if (withTransport.length === 0) {\n    return 'Sans transport organisé';\n  }\n  const sorted = withTransport.sort((a, b) => a.extra_eur - b.extra_eur);\n  return sorted.map(d => `${d.city_label} (+${d.extra_eur}€)`).join(', ');\n}\n\n// ============================================\n// TRAITEMENT PRINCIPAL\n// ============================================\n\nconst data = $input.item.json;\n\nconst refactoredTitle = refactorTitle(data.title);\nconst refactoredDescription = refactorDescription(\n  data.description, \n  data.category, \n  data.filtered_sessions\n);\n\nconst prices = data.filtered_sessions.map(s => s.promo_price_eur || s.base_price_eur).filter(p => p);\nconst minPrice = prices.length > 0 ? Math.min(...prices) : null;\nconst durations = data.filtered_sessions.map(s => s.duration_days);\nconst minDuration = durations.length > 0 ? Math.min(...durations) : null;\nconst maxDuration = durations.length > 0 ? Math.max(...durations) : null;\n\nreturn [{\n  json: {\n    // Données originales\n    original_title: data.title,\n    original_description: data.description,\n    \n    // Données reformulées (à utiliser pour Supabase)\n    refactored_title: refactoredTitle,\n    refactored_description: refactoredDescription,\n    \n    // Métadonnées\n    source_url: data.source_url,\n    category: data.category,\n    \n    // Sessions formatées\n    sessions_formatted: formatSessions(data.filtered_sessions),\n    sessions_data: data.filtered_sessions,\n    sessions_count: data.filtered_sessions_count,\n    \n    // Départs formatés\n    departures_formatted: formatDepartures(data.departures),\n    departures_data: data.departures,\n    departures_count: data.departures_count,\n    \n    // Prix et durées\n    price_from: minPrice,\n    price_range: minPrice ? `À partir de ${minPrice}€` : 'Tarif communiqué aux professionnels',\n    duration_days_min: minDuration,\n    duration_days_max: maxDuration,\n    duration_range: (minDuration && maxDuration) ? `${minDuration} à ${maxDuration} jours` : 'Durée variable',\n    \n    // Validité\n    is_fully_booked: data.is_fully_booked,\n    has_valid_sessions: data.has_valid_sessions,\n    \n    // Timestamps\n    scraped_at: data.scraped_at,\n    scrape_year: data.scrape_year,\n    refactored_at: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "008-refactor-content",
+      "name": "🔄 REFORMULER Contenu (CRUCIAL)",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1780, 300],
+      "notesInFlow": true,
+      "notes": "⚠️ CE NOEUD EST CRUCIAL !\\n\\nIl reformule les contenus pour les travailleurs sociaux AVANT l'envoi à Supabase.\\n\\nNe pas modifier sans consultation."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.has_valid_sessions }}",
+              "rightValue": true,
+              "operatorType": "boolean",
+              "type": "boolean"
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "009-filter-valid",
+      "name": "Filtrer Séjours Valides",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [2000, 300]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/admin/stays",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"title\": \"{{ $json.refactored_title }}\",\n  \"description\": \"{{ $json.refactored_description }}\",\n  \"sourceUrl\": \"{{ $json.source_url }}\",\n  \"category\": \"{{ $json.category }}\",\n  \"priceFrom\": \"{{ $json.price_from }}\",\n  \"durationDays\": \"{{ $json.duration_days_min }}\",\n  \"contentKids\": {\n    \"sessions\": \"{{ JSON.stringify($json.sessions_data) }}\",\n    \"sessions_formatted\": \"{{ $json.sessions_formatted }}\",\n    \"departures\": \"{{ JSON.stringify($json.departures_data) }}\",\n    \"departures_formatted\": \"{{ $json.departures_formatted }}\",\n    \"price_range\": \"{{ $json.price_range }}\",\n    \"duration_range\": \"{{ $json.duration_range }}\"\n  },\n  \"published\": false,\n  \"importedAt\": \"{{ $json.scraped_at }}\",\n  \"lastSyncAt\": \"{{ $json.refactored_at }}\",\n  \"ageMin\": 6,\n  \"ageMax\": 17,\n  \"period\": \"été\",\n  \"geography\": \"{{ $json.category }}\",\n  \"accommodation\": \"Centre de vacances UFOVAL\",\n  \"supervision\": \"Encadrement professionnel UFOVAL\",\n  \"themes\": [\"{{ $json.category }}\"]\n}",
+        "options": {}
+      },
+      "id": "010-create-stay-refactored",
+      "name": "Créer Séjour AVEC Contenu Reformulé",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [2220, 200],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "1",
+          "name": "GED API Auth"
+        }
+      },
+      "notesInFlow": true,
+      "notes": "✅ Utilise le CONTENU REFORMULÉ\\n\\nrefactored_title\\nrefactored_description\\nsessions_formatted\\ndepartures_formatted"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/admin/sessions/bulk-sync",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"sessions\": \"{{ JSON.stringify($json.sessions_data) }}\",\n  \"source_url\": \"{{ $json.source_url }}\"\n}",
+        "options": {}
+      },
+      "id": "011-sync-sessions",
+      "name": "Synchroniser Sessions en Bulk",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [2440, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "1",
+          "name": "GED API Auth"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fileName": "/Users/laidhamoudi/groupe-et-decouverte/dev-ged/out/ufoval/ufoval_enrichment_full.json",
+        "fileContent": "={{ JSON.stringify($json, null, 2) }}",
+        "options": {}
+      },
+      "id": "012-save-json",
+      "name": "Sauvegarder JSON Enrichment",
+      "type": "n8n-nodes-base.writeFile",
+      "typeVersion": 1,
+      "position": [2660, 300]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/webhook/ufoval-scraper-complete",
+        "method": "POST",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"status\": \"success\",\n  \"title\": \"{{ $json.refactored_title }}\",\n  \"sessions_processed\": \"{{ $json.sessions_count }}\",\n  \"timestamp\": \"{{ $json.refactored_at }}\"\n}",
+        "options": {}
+      },
+      "id": "013-notify-complete",
+      "name": "Notifier Fin du Sync",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [2880, 300]
+    }
+  ],
+  "connections": {
+    "Tous les jours à 2h du matin": {
+      "main": [[{"node": "Fetch Homepage UFOVAL", "type": "main", "index": 0}]]
+    },
+    "Fetch Homepage UFOVAL": {
+      "main": [[{"node": "Extraire Catégories", "type": "main", "index": 0}]]
+    },
+    "Extraire Catégories": {
+      "main": [[{"node": "Fetch Page Catégorie", "type": "main", "index": 0}]]
+    },
+    "Fetch Page Catégorie": {
+      "main": [[{"node": "Extraire Liens Séjours", "type": "main", "index": 0}]]
+    },
+    "Extraire Liens Séjours": {
+      "main": [[{"node": "Fetch Page Détail Séjour", "type": "main", "index": 0}]]
+    },
+    "Fetch Page Détail Séjour": {
+      "main": [[{"node": "Parser Sessions + Départs", "type": "main", "index": 0}]]
+    },
+    "Parser Sessions + Départs": {
+      "main": [[{"node": "🔄 REFORMULER Contenu (CRUCIAL)", "type": "main", "index": 0}]]
+    },
+    "🔄 REFORMULER Contenu (CRUCIAL)": {
+      "main": [[{"node": "Filtrer Séjours Valides", "type": "main", "index": 0}]]
+    },
+    "Filtrer Séjours Valides": {
+      "main": [[{"node": "Créer Séjour AVEC Contenu Reformulé", "type": "main", "index": 0}]]
+    },
+    "Créer Séjour AVEC Contenu Reformulé": {
+      "main": [[{"node": "Synchroniser Sessions en Bulk", "type": "main", "index": 0}]]
+    },
+    "Synchroniser Sessions en Bulk": {
+      "main": [[{"node": "Sauvegarder JSON Enrichment", "type": "main", "index": 0}]]
+    },
+    "Sauvegarder JSON Enrichment": {
+      "main": [[{"node": "Notifier Fin du Sync", "type": "main", "index": 0}]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-01-29T10:00:00.000Z",
+  "versionId": "2"
+}
