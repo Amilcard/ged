@@ -1,0 +1,168 @@
+{
+  "meta": {
+    "note": "Configuration des 4 nouveaux nœuds n8n - Prêt à implémenter",
+    "workflow": "GED__UFOVAL__SCRAPE_SEED_STAYS__v1",
+    "insertion_point": "Après 'Enrichissement JSON de Sauvegarder'",
+    "supabase_project": "iirfvndgzutbxwfdwawu",
+    "supabase_host": "https://iirfvndgzutbxwfdwawu.supabase.co"
+  },
+
+  "nodes": [
+    {
+      "node_order": 1,
+      "node_name": "FILTER__VALID_ITEMS_FOR_DB",
+      "node_type": "n8n-nodes-base.if",
+      "description": "Filtre les items avec champs obligatoires présents avant insertion DB",
+      "configuration": {
+        "conditions": {
+          "combineOperation": "all",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.source_url }}",
+              "operation": "isNotEmpty"
+            },
+            {
+              "leftValue": "={{ $json.pro?.title_pro }}",
+              "operation": "isNotEmpty"
+            },
+            {
+              "leftValue": "={{ $json.kids?.title_kids }}",
+              "operation": "isNotEmpty"
+            },
+            {
+              "leftValue": "={{ $json.sessions_json }}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        },
+        "routing": {
+          "true": "Continue to HTTP__UPSERT_GD_STAYS",
+          "false": "Terminate (or optional log node)"
+        }
+      }
+    },
+
+    {
+      "node_order": 2,
+      "node_name": "HTTP__UPSERT_GD_STAYS",
+      "node_type": "n8n-nodes-base.httpRequest",
+      "description": "Upsert des séjours dans Supabase gd_stays via REST API",
+      "configuration": {
+        "method": "POST",
+        "url": "https://iirfvndgzutbxwfdwawu.supabase.co/rest/v1/gd_stays",
+        "queryParameters": {
+          "on_conflict": "source_url"
+        },
+        "headers": {
+          "apikey": "={{ $credentials.supabase.serviceRoleKey }}",
+          "Authorization": "Bearer {{ $credentials.supabase.serviceRoleKey }}",
+          "Content-Type": "application/json",
+          "Prefer": "resolution=merge-duplicates,return=representation"
+        },
+        "sendBody": true,
+        "bodyContentType": "json",
+        "bodyExpression": "={{ $input.all().map(item => ({\n  source_url: item.json.source_url,\n  slug: item.json.slug || item.json.source_url.split('/').pop().replace(/[^a-z0-9-]/gi, '-').toLowerCase(),\n  title: item.json.pro?.title_pro || item.json.kids?.title_kids || 'Sans titre',\n  title_pro: item.json.pro?.title_pro,\n  title_kids: item.json.kids?.title_kids,\n  description_pro: item.json.pro?.description_pro || null,\n  description_kids: item.json.kids?.description_kids || null,\n  sessions_json: typeof item.json.sessions_json === 'string' ? item.json.sessions_json : JSON.stringify(item.json.sessions_json),\n  published: true,\n  import_batch_ts: new Date().toISOString()\n})) }}",
+        "options": {
+          "splitIntoItems": false,
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "notes": {
+        "credential_name": "Adapter le nom exact du credential Supabase dans n8n",
+        "slug_generation": "Si slug manque, on le génère depuis source_url",
+        "title_fallback": "La colonne 'title' est remplie avec title_pro en priorité (compatibilité ancien schéma)"
+      }
+    },
+
+    {
+      "node_order": 3,
+      "node_name": "TRANSFORM__SESSIONS_TO_ROWS",
+      "node_type": "n8n-nodes-base.function",
+      "description": "Transforme sessions_json en lignes individuelles pour insertion dans gd_stay_sessions",
+      "configuration": {
+        "functionCode": "// Transformation sessions_json → lignes DB\nconst output = [];\n\nfor (const item of $input.all()) {\n  const stay = item.json;\n  \n  // Parse sessions_json (peut être string ou array ou object)\n  let sessions = [];\n  try {\n    if (Array.isArray(stay.sessions_json)) {\n      sessions = stay.sessions_json;\n    } else if (typeof stay.sessions_json === 'string') {\n      sessions = JSON.parse(stay.sessions_json);\n    } else if (stay.sessions_json && typeof stay.sessions_json === 'object') {\n      sessions = [stay.sessions_json];\n    }\n  } catch (e) {\n    console.error(`[TRANSFORM] Failed to parse sessions_json for stay ${stay.slug}:`, e);\n    continue; // Skip cet item\n  }\n  \n  // Générer le slug si manquant\n  const staySlug = stay.slug || (stay.source_url ? \n    stay.source_url.split('/').pop().replace(/[^a-z0-9-]/gi, '-').toLowerCase() : \n    null\n  );\n  \n  if (!staySlug) {\n    console.error('[TRANSFORM] Missing slug and source_url for stay:', stay);\n    continue;\n  }\n  \n  // Créer une ligne par session\n  for (const session of sessions) {\n    // Vérifier que start_date et end_date existent\n    const startDate = session.start_date || session.date_debut || session.dateDebut || null;\n    const endDate = session.end_date || session.date_fin || session.dateFin || null;\n    \n    if (!startDate || !endDate) {\n      console.warn('[TRANSFORM] Missing dates for session:', session);\n      continue; // Skip cette session\n    }\n    \n    output.push({\n      json: {\n        stay_slug: staySlug,\n        start_date: startDate,\n        end_date: endDate,\n        seats_left: session.seats_left ?? session.places_restantes ?? session.placesRestantes ?? null,\n        city_departure: session.city_departure ?? session.ville_depart ?? session.villeDepart ?? null,\n        price: session.price ?? session.tarif ?? session.prix ?? null,\n        age_min: session.age_min ?? session.ageMin ?? null,\n        age_max: session.age_max ?? session.ageMax ?? null,\n        import_batch_ts: new Date().toISOString()\n      }\n    });\n  }\n}\n\nif (output.length === 0) {\n  console.warn('[TRANSFORM] No sessions produced. Check input data.');\n}\n\nreturn output;"
+      },
+      "notes": {
+        "input": "Reçoit les stays depuis HTTP__UPSERT_GD_STAYS",
+        "output": "Produit N items (1 par session)",
+        "error_handling": "Try/catch pour parsing JSON + logs d'erreur",
+        "field_aliases": "Supporte plusieurs noms de champs (date_debut, dateDebut, start_date, etc.)"
+      }
+    },
+
+    {
+      "node_order": 4,
+      "node_name": "HTTP__UPSERT_GD_STAY_SESSIONS",
+      "node_type": "n8n-nodes-base.httpRequest",
+      "description": "Upsert des sessions dans Supabase gd_stay_sessions via REST API",
+      "configuration": {
+        "method": "POST",
+        "url": "https://iirfvndgzutbxwfdwawu.supabase.co/rest/v1/gd_stay_sessions",
+        "queryParameters": {
+          "on_conflict": "stay_slug,start_date,end_date"
+        },
+        "headers": {
+          "apikey": "={{ $credentials.supabase.serviceRoleKey }}",
+          "Authorization": "Bearer {{ $credentials.supabase.serviceRoleKey }}",
+          "Content-Type": "application/json",
+          "Prefer": "resolution=merge-duplicates,return=representation"
+        },
+        "sendBody": true,
+        "bodyContentType": "json",
+        "bodyExpression": "={{ $input.all().map(item => ({\n  stay_slug: item.json.stay_slug,\n  start_date: item.json.start_date,\n  end_date: item.json.end_date,\n  seats_left: item.json.seats_left,\n  city_departure: item.json.city_departure,\n  price: item.json.price,\n  age_min: item.json.age_min,\n  age_max: item.json.age_max,\n  import_batch_ts: item.json.import_batch_ts\n})) }}",
+        "options": {
+          "splitIntoItems": false,
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      }
+    }
+  ],
+
+  "workflow_topology": {
+    "connections": [
+      "Enrichissement JSON de Sauvegarder → FILTER__VALID_ITEMS_FOR_DB",
+      "FILTER__VALID_ITEMS_FOR_DB (TRUE) → HTTP__UPSERT_GD_STAYS",
+      "HTTP__UPSERT_GD_STAYS → TRANSFORM__SESSIONS_TO_ROWS",
+      "TRANSFORM__SESSIONS_TO_ROWS → HTTP__UPSERT_GD_STAY_SESSIONS",
+      "",
+      "Note: Conserver la connexion existante:",
+      "Enrichissement JSON de Sauvegarder → Notifier Fin du S... (ne PAS toucher)"
+    ]
+  },
+
+  "credentials_required": {
+    "name": "Supabase",
+    "type": "supabaseApi",
+    "fields": {
+      "host": "https://iirfvndgzutbxwfdwawu.supabase.co",
+      "serviceRoleKey": "[À configurer dans n8n Credentials si pas déjà fait]"
+    },
+    "note": "Vérifier le nom exact du credential dans n8n (peut être 'Supabase', 'Supabase Flooow', etc.)"
+  },
+
+  "validation_checklist": [
+    "☐ Les 4 nœuds sont ajoutés dans l'ordre",
+    "☐ Le credential Supabase est correctement référencé",
+    "☐ Le nœud FILTER est connecté depuis 'Enrichissement JSON de Sauvegarder'",
+    "☐ La branche TRUE du FILTER va vers HTTP__UPSERT_GD_STAYS",
+    "☐ Le code JavaScript du nœud Function est copié intégralement",
+    "☐ Les 2 nœuds HTTP ont le bon header 'Prefer' pour merge-duplicates",
+    "☐ L'ancienne connexion 'Enrichissement JSON → Notifier Fin' est préservée",
+    "☐ Sauvegarder le workflow (Ctrl+S ou bouton Save)",
+    "☐ Tester en mode manuel (Execute Workflow)"
+  ],
+
+  "rollback_procedure": {
+    "if_error": "Désactiver les 4 nouveaux nœuds (toggle OFF sur chaque nœud)",
+    "result": "Le workflow revient au comportement d'avant (JSON export uniquement)",
+    "no_data_loss": "Le JSON export continue de fonctionner normalement"
+  }
+}

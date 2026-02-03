@@ -1,0 +1,50 @@
+{
+  "context": "GED project - n8n webhook to Supabase",
+  "workflow": "GED__UFOVAL__SCRAPE_SEED_STAYS__v1",
+  "url": "https://n8n.srv1307641.hstgr.cloud/workflow/kG6OASM4PxZaBt9H",
+
+  "problem": "Webhook returns HTTP 200 but NO data in Supabase tables",
+  "webhook_url": "https://n8n.srv1307641.hstgr.cloud/webhook/ufoval-import",
+  "secret_header": "X-Webhook-Secret: ged-ufoval-2026",
+
+  "curl_command": "curl -X POST https://n8n.srv1307641.hstgr.cloud/webhook/ufoval-import -H 'Content-Type: application/json' -H 'X-Webhook-Secret: ged-ufoval-2026' -d @out/ufoval/rewrite_ready_final.json",
+
+  "response": {
+    "status": 200,
+    "body": "{\"message\": \"Workflow was started\"}"
+  },
+
+  "supabase": {
+    "project": "iirfvndgzutbxwfdwawu",
+    "api_url": "https://iirfvndgzutbxwfdwawu.supabase.co/rest/v1/",
+    "tables": ["gd_stays", "gd_stay_sessions"],
+    "check_sql": "SELECT COUNT(*) FROM gd_stays WHERE import_batch_ts >= NOW() - INTERVAL '5 minutes';"
+  },
+
+  "data_sent": {
+    "file": "out/ufoval/rewrite_ready_final.json",
+    "records": 18,
+    "structure": {
+      "source_url": "string",
+      "pro.title_pro": "string",
+      "kids.title_kids": "string",
+      "sessions_json": "array"
+    }
+  },
+
+  "expected_flow": "WEBHOOK → IF (check secret) → FILTER → HTTP__UPSERT_GD_STAYS → TRANSFORM_SESSIONS → HTTP__UPSERT_GD_STAY_SESSIONS",
+
+  "audit_request": [
+    "Check n8n workflow execution - which nodes ran?",
+    "Did IF node return TRUE or FALSE?",
+    "Any errors in HTTP__UPSERT_GD_STAYS node?",
+    "What is the INPUT of HTTP__UPSERT_GD_STAYS node?",
+    "Are credentials Supabase configured in n8n?"
+  ],
+
+  "ref_files": [
+    "docs/N8N_WEBHOOK_SETUP.md",
+    "docs/N8N_CONNECTION_PROBLEM.md",
+    "docs/UFOVAL_SCRAPING_WORKFLOW_EXPLAINED.md"
+  ]
+}
