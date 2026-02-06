@@ -16,17 +16,13 @@ out/ufoval/*.json
 out/ufoval/_debug_html/
 out/ufoval/_debug_html_sessions/
 
-# Local/IA
-CLAUDE.md
-scripts/ufoval/merge-departures-and-sessions.js
+# UFOVAL generated outputs
+scripts/ufoval/out/
+*.jsonl
 
 # Local/IA
 CLAUDE.md
 scripts/ufoval/merge-departures-and-sessions.js
-
-# Local AI/work files
-.ai-workspace/
-.tmp-check.ts
 
 # Local AI/work files
 .ai-workspace/
